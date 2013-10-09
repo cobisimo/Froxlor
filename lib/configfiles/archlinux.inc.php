@@ -36,6 +36,30 @@ return Array(
   'archlinux' => Array(
     'label' => 'Archlinux',
     'services' => Array(
+	    'http' => Array(
+        'label' => $lng['admin']['configfiles']['http'],
+        'daemons' => Array(
+        )
+      ),
+      	'dns' => Array(
+        'label' => $lng['admin']['configfiles']['dns'],
+        'daemons' => Array(
+        'bind' => Array(
+          'label' => 'Bind Nameserver',
+          'commands' => Array(
+            'pacman -S bind',
+            'mkdir -p ' . $settings['system']['bindconf_directory'],
+            'echo "include \"' . $settings['system']['bindconf_directory'] . 'froxlor_bind.conf\";" >> /etc/named.conf',
+            'touch ' . $settings['system']['bindconf_directory'] . 'froxlor_bind.conf',
+            'chown named:0 ' . $settings['system']['bindconf_directory'] . 'froxlor_bind.conf',
+            'chmod 0600 ' . $settings['system']['bindconf_directory'] . 'froxlor_bind.conf',
+            'systemctl enable named'
+          ),
+          'restart' => Array(
+            'systemctl start named'
+          )
+        ),
+      ),
     )
   )
 );
