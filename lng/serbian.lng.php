@@ -63,10 +63,10 @@ $lng['customer']['email'] = 'Ел. пошта';
 $lng['customer']['customernumber'] = 'Лични број корисника';
 $lng['customer']['diskspace'] = 'Простор на диску (MB)';
 $lng['customer']['traffic'] = 'Проток (GB)';
-$lng['customer']['mysqls'] = 'MySQL-база';
-$lng['customer']['emails'] = 'E-mail-адреса';
-$lng['customer']['accounts'] = 'E-mail-налога';
-$lng['customer']['forwarders'] = 'E-mail-прослеђивања';
+$lng['customer']['mysqls'] = 'MySQL база';
+$lng['customer']['emails'] = 'E-mail адреса';
+$lng['customer']['accounts'] = 'E-mail налога';
+$lng['customer']['forwarders'] = 'E-mail прослеђивања';
 $lng['customer']['ftps'] = 'FTP-налога';
 $lng['customer']['subdomains'] = 'Поддомена';
 $lng['customer']['domains'] = 'Домена';
@@ -116,31 +116,31 @@ $lng['changepassword']['also_change_ftp'] = ' такође промени лоз
  */
 
 $lng['domains']['description'] = 'Here you can create (sub-)domains and change their paths.<br />The system will need some time to apply the new settings after every change.';
-$lng['domains']['domainsettings'] = 'Domain settings';
-$lng['domains']['domainname'] = 'Domain name';
-$lng['domains']['subdomain_add'] = 'Create subdomain';
-$lng['domains']['subdomain_edit'] = 'Edit (sub)domain';
+$lng['domains']['domainsettings'] = 'Подешавања домена';
+$lng['domains']['domainname'] = 'Име домена';
+$lng['domains']['subdomain_add'] = 'Направи поддомен';
+$lng['domains']['subdomain_edit'] = 'Измена поддомена';
 $lng['domains']['wildcarddomain'] = 'Create as wildcarddomain?';
-$lng['domains']['aliasdomain'] = 'Alias for domain';
-$lng['domains']['noaliasdomain'] = 'No alias domain';
+$lng['domains']['aliasdomain'] = 'Синоним за домен';
+$lng['domains']['noaliasdomain'] = 'Без синонима за домен';
 
 /**
  * E-mails
  */
 
-$lng['emails']['description'] = 'Here you can create and change your e-mail addresses.<br />An account is like your letterbox in front of your house. If someone sends you an email, it will be dropped into the account.<br /><br />To download your emails use the following settings in your mailprogram: (The data in <i>italics</i> has to be changed to the equivalents you typed in!)<br />Hostname: <b><i>domainname</i></b><br />Username: <b><i>account name / e-mail address</i></b><br />password: <b><i>the password you\'ve chosen</i></b>';
+$lng['emails']['description'] = 'Овде можете направити и изменити адресе ел. поште под вашим доменима.<br />Налог је као поштанско сандуче испред ваше куће. Ако вам неко пошаље електронску пошту (e-mail), она ће завршити у вашем налогу.<br /><br />Како би преузели ел. пошту са свог налога користите следеће параметре у свом програму за преглед ел. поште: (<i>Накошене</i> податке је потербно изменити да одговарају онима које унесете приликом формирања налога!)<br />Име домаћина (домена): <b><i>назив домена</i></b><br />Корисничко име: <b><i>име налога или адреса ел. поште</i></b><br />Лозинка: <b><i>лозинка коју сте изабрали</i></b>';
 $lng['emails']['emailaddress'] = 'E-mail-address';
-$lng['emails']['emails_add'] = 'Create e-mail-address';
-$lng['emails']['emails_edit'] = 'Edit e-mail-address';
+$lng['emails']['emails_add'] = 'Направи налог ел. поште';
+$lng['emails']['emails_edit'] = 'Измени адресе ел. поште';
 $lng['emails']['catchall'] = 'Catchall';
 $lng['emails']['iscatchall'] = 'Define as catchall-address?';
-$lng['emails']['account'] = 'Account';
-$lng['emails']['account_add'] = 'Create account';
-$lng['emails']['account_delete'] = 'Delete account';
-$lng['emails']['from'] = 'Source';
-$lng['emails']['to'] = 'Destination';
-$lng['emails']['forwarders'] = 'Forwarders';
-$lng['emails']['forwarder_add'] = 'Create forwarder';
+$lng['emails']['account'] = 'Налог';
+$lng['emails']['account_add'] = 'Направи налог';
+$lng['emails']['account_delete'] = 'Избриши налог';
+$lng['emails']['from'] = 'Извор';
+$lng['emails']['to'] = 'Дестинација';
+$lng['emails']['forwarders'] = 'Прослеђивања';
+$lng['emails']['forwarder_add'] = 'Формирај прослеђивање';
 
 /**
  * FTP
@@ -153,9 +153,9 @@ $lng['ftp']['account_add'] = 'Create Account';
  * MySQL
  */
 
-$lng['mysql']['databasename'] = 'User/Database name';
-$lng['mysql']['databasedescription'] = 'Database description';
-$lng['mysql']['database_create'] = 'Create database';
+$lng['mysql']['databasename'] = 'Име корисника/базе података';
+$lng['mysql']['databasedescription'] = 'Опис базе података';
+$lng['mysql']['database_create'] = 'Направи базу података';
 
 /**
  * Extras
@@ -403,7 +403,7 @@ $lng['admin']['ipsandports']['add'] = 'Add IP/Port';
 $lng['admin']['ipsandports']['edit'] = 'Edit IP/Port';
 $lng['admin']['ipsandports']['ipandport'] = 'IP/Port';
 $lng['admin']['ipsandports']['ip'] = 'IP';
-$lng['admin']['ipsandports']['port'] = 'Port';
+$lng['admin']['ipsandports']['port'] = 'Порт';
 
 // ADDED IN 1.2.13-rc3
 
@@ -412,13 +412,13 @@ $lng['question']['admin_domain_reallydocrootoutofcustomerroot'] = 'Are you sure,
 
 // ADDED IN 1.2.14-rc1
 
-$lng['admin']['memorylimitdisabled'] = 'Disabled';
+$lng['admin']['memorylimitdisabled'] = 'Онемогућено';
 $lng['domain']['openbasedirpath'] = 'OpenBasedir-path';
 $lng['domain']['docroot'] = 'Path from field above';
 $lng['domain']['homedir'] = 'Home directory';
 $lng['admin']['valuemandatory'] = 'This value is mandatory';
 $lng['admin']['valuemandatorycompany'] = 'Either "name" and "firstname" or "company" must be filled';
-$lng['menue']['main']['username'] = 'Logged in as: ';
+$lng['menue']['main']['username'] = 'Пријављени сте као: ';
 $lng['panel']['urloverridespath'] = 'URL (overrides path)';
 $lng['panel']['pathorurl'] = 'Path or URL';
 $lng['error']['sessiontimeoutiswrong'] = 'Only numerical "session timeout" is allowed.';
@@ -435,18 +435,18 @@ $lng['error']['pagingiswrong'] = 'The "entries per page"-value is wrong. Only nu
 $lng['error']['phpmyadminiswrong'] = 'The phpMyAdmin-link is not a valid link.';
 $lng['error']['webmailiswrong'] = 'The webmail-link is not a valid link.';
 $lng['error']['webftpiswrong'] = 'The WebFTP-link is not a valid link.';
-$lng['domains']['hasaliasdomains'] = 'Has alias domain(s)';
-$lng['serversettings']['defaultip']['title'] = 'Default IP/Port';
+$lng['domains']['hasaliasdomains'] = 'Постоји синоним домена';
+$lng['serversettings']['defaultip']['title'] = 'Текућа IP-адреса/порт';
 $lng['serversettings']['defaultip']['description'] = 'What\'s the default IP/Port combination?';
-$lng['domains']['statstics'] = 'Usage Statistics';
-$lng['panel']['ascending'] = 'ascending';
-$lng['panel']['decending'] = 'decending';
-$lng['panel']['search'] = 'Search';
-$lng['panel']['used'] = 'used';
+$lng['domains']['statstics'] = 'Статистика коришћења';
+$lng['panel']['ascending'] = 'растуће';
+$lng['panel']['decending'] = 'опадајуће';
+$lng['panel']['search'] = 'Претрага';
+$lng['panel']['used'] = 'коришћено';
 
 // ADDED IN 1.2.14-rc3
 
-$lng['panel']['translator'] = 'Translator';
+$lng['panel']['translator'] = 'Преводилац';
 
 // ADDED IN 1.2.14-rc4
 
@@ -455,7 +455,7 @@ $lng['error']['stringformaterror'] = 'The value for the field "%s" is not in the
 // ADDED IN 1.2.15-rc1
 
 $lng['admin']['serversoftware'] = 'Serversoftware';
-$lng['admin']['phpversion'] = 'PHP-Version';
+$lng['admin']['phpversion'] = 'PHP-верзија';
 $lng['admin']['phpmemorylimit'] = 'PHP-Memory-Limit';
 $lng['admin']['mysqlserverversion'] = 'MySQL Server Version';
 $lng['admin']['mysqlclientversion'] = 'MySQL Client Version';
@@ -586,12 +586,12 @@ $lng['serversettings']['webalizer_quiet']['description'] = 'Verbosity of the web
 
 $lng['ticket']['admin_email'] = 'root@localhost';
 $lng['ticket']['noreply_email'] = 'tickets@froxlor';
-$lng['admin']['ticketsystem'] = 'Support-tickets';
-$lng['menue']['ticket']['ticket'] = 'Support tickets';
-$lng['menue']['ticket']['categories'] = 'Support categories';
-$lng['menue']['ticket']['archive'] = 'Ticket-archive';
-$lng['ticket']['description'] = 'Here you can send help-requests to your responsible administrator.<br />Notifications will be sent via e-mail.';
-$lng['ticket']['ticket_new'] = 'Open a new ticket';
+$lng['admin']['ticketsystem'] = 'Картице подршке';
+$lng['menue']['ticket']['ticket'] = 'Картице подршке';
+$lng['menue']['ticket']['categories'] = 'Категорије подршке';
+$lng['menue']['ticket']['archive'] = 'Архива картица';
+$lng['ticket']['description'] = 'Овде можете послати захтев за помоћ формирањем картице администартору који вам је додељен.<br />Обавештење ће бити послато преко ел. поште.';
+$lng['ticket']['ticket_new'] = 'Отвори нову картицу';
 $lng['ticket']['ticket_reply'] = 'Answer ticket';
 $lng['ticket']['ticket_reopen'] = 'Reopen ticket';
 $lng['ticket']['ticket_newcateory'] = 'Create new category';
@@ -600,17 +600,17 @@ $lng['ticket']['ticket_view'] = 'View ticketcourse';
 $lng['ticket']['ticketcount'] = 'Tickets';
 $lng['ticket']['ticket_answers'] = 'Replies';
 $lng['ticket']['lastchange'] = 'Last action';
-$lng['ticket']['subject'] = 'Subject';
-$lng['ticket']['status'] = 'Status';
+$lng['ticket']['subject'] = 'Тема';
+$lng['ticket']['status'] = 'Статус';
 $lng['ticket']['lastreplier'] = 'Last replier';
-$lng['ticket']['priority'] = 'Priority';
-$lng['ticket']['low'] = 'Low';
-$lng['ticket']['normal'] = 'Normal';
-$lng['ticket']['high'] = 'High';
-$lng['ticket']['lastchange'] = 'Last change';
+$lng['ticket']['priority'] = 'Приоритет';
+$lng['ticket']['low'] = 'Низак';
+$lng['ticket']['normal'] = 'Нормалан';
+$lng['ticket']['high'] = 'Висок';
+$lng['ticket']['lastchange'] = 'Последња измена';
 $lng['ticket']['lastchange_from'] = 'From date (dd.mm.yyyy)';
 $lng['ticket']['lastchange_to'] = 'To date (dd.mm.yyyy)';
-$lng['ticket']['category'] = 'Category';
+$lng['ticket']['category'] = 'Категорија';
 $lng['ticket']['no_cat'] = 'None';
 $lng['ticket']['message'] = 'Message';
 $lng['ticket']['show'] = 'View';
@@ -618,18 +618,18 @@ $lng['ticket']['answer'] = 'Answer';
 $lng['ticket']['close'] = 'Close';
 $lng['ticket']['reopen'] = 'Re-open';
 $lng['ticket']['archive'] = 'Archive';
-$lng['ticket']['ticket_delete'] = 'Delete ticket';
+$lng['ticket']['ticket_delete'] = 'Избриши картицу';
 $lng['ticket']['lastarchived'] = 'Recently archived tickets';
-$lng['ticket']['archivedtime'] = 'Archived';
-$lng['ticket']['open'] = 'Open';
-$lng['ticket']['wait_reply'] = 'Waiting for reply';
-$lng['ticket']['replied'] = 'Replied';
-$lng['ticket']['closed'] = 'Closed';
-$lng['ticket']['staff'] = 'Staff';
-$lng['ticket']['customer'] = 'Customer';
-$lng['ticket']['old_tickets'] = 'Ticket messages';
-$lng['ticket']['search'] = 'Search archive';
-$lng['ticket']['nocustomer'] = 'No choice';
+$lng['ticket']['archivedtime'] = 'Архивирана';
+$lng['ticket']['open'] = 'Отворена';
+$lng['ticket']['wait_reply'] = 'Чека на одговор';
+$lng['ticket']['replied'] = 'Одговорено';
+$lng['ticket']['closed'] = 'Затворено';
+$lng['ticket']['staff'] = 'Ствари';
+$lng['ticket']['customer'] = 'Корисник';
+$lng['ticket']['old_tickets'] = 'Поруке картице';
+$lng['ticket']['search'] = 'Претрага архиве';
+$lng['ticket']['nocustomer'] = 'Нез избора';
 $lng['ticket']['archivesearch'] = 'Archive searchresults';
 $lng['ticket']['noresults'] = 'No tickets found';
 $lng['ticket']['notmorethanxopentickets'] = 'Due to spam-protection you cannot have more than %s open tickets';
@@ -698,31 +698,31 @@ $lng['serversettings']['mod_fcgid']['tmpdir']['title'] = 'Temp directory';
 
 $lng['serversettings']['ticket']['reset_cycle']['title'] = 'Reset used tickets cycle';
 $lng['serversettings']['ticket']['reset_cycle']['description'] = 'Reset the customers used ticket counter to 0 in the chosen cycle';
-$lng['admin']['tickets']['daily'] = 'Daily';
-$lng['admin']['tickets']['weekly'] = 'Weekly';
-$lng['admin']['tickets']['monthly'] = 'Monthly';
-$lng['admin']['tickets']['yearly'] = 'Yearly';
+$lng['admin']['tickets']['daily'] = 'Дневно';
+$lng['admin']['tickets']['weekly'] = 'Недељно';
+$lng['admin']['tickets']['monthly'] = 'Месечно';
+$lng['admin']['tickets']['yearly'] = 'Годишње';
 $lng['error']['ticketresetcycleiswrong'] = 'The cycle for ticket-resets has to be "daily", "weekly", "monthly" or "yearly".';
 
 // ADDED IN 1.2.19-svn4
 
-$lng['menue']['traffic']['traffic'] = 'Traffic';
-$lng['menue']['traffic']['current'] = 'Current Month';
-$lng['traffic']['month'] = "Month";
-$lng['traffic']['day'] = "Day";
-$lng['traffic']['months'][1] = "January";
-$lng['traffic']['months'][2] = "February";
-$lng['traffic']['months'][3] = "March";
-$lng['traffic']['months'][4] = "April";
-$lng['traffic']['months'][5] = "May";
-$lng['traffic']['months'][6] = "June";
-$lng['traffic']['months'][7] = "July";
-$lng['traffic']['months'][8] = "August";
-$lng['traffic']['months'][9] = "September";
-$lng['traffic']['months'][10] = "October";
-$lng['traffic']['months'][11] = "November";
-$lng['traffic']['months'][12] = "December";
-$lng['traffic']['mb'] = "Traffic (MB)";
+$lng['menue']['traffic']['traffic'] = 'Проток';
+$lng['menue']['traffic']['current'] = 'Текући месец';
+$lng['traffic']['month'] = "Месец";
+$lng['traffic']['day'] = "Дан";
+$lng['traffic']['months'][1] = "Јануар";
+$lng['traffic']['months'][2] = "Фебруар";
+$lng['traffic']['months'][3] = "Март";
+$lng['traffic']['months'][4] = "Април";
+$lng['traffic']['months'][5] = "Мај";
+$lng['traffic']['months'][6] = "Јун";
+$lng['traffic']['months'][7] = "Јул";
+$lng['traffic']['months'][8] = "Август";
+$lng['traffic']['months'][9] = "Септембар";
+$lng['traffic']['months'][10] = "Октобар";
+$lng['traffic']['months'][11] = "Новенбар";
+$lng['traffic']['months'][12] = "Децембар";
+$lng['traffic']['mb'] = "Проток (MB)";
 $lng['traffic']['distribution'] = '<font color="#019522">FTP</font> | <font color="#0000FF">HTTP</font> | <font color="#800000">Mail</font>';
 $lng['traffic']['sumhttp'] = 'Summation HTTP-Traffic in';
 $lng['traffic']['sumftp'] = 'Summation FTP-Traffic in';
@@ -889,10 +889,10 @@ $lng['serversettings']['allow_password_reset_admin']['description'] = 'Admins/re
 
 // ADDED IN 1.2.19-svn25
 
-$lng['emails']['quota'] = 'Quota';
-$lng['emails']['noquota'] = 'No quota';
-$lng['emails']['updatequota'] = 'Update Quota';
-$lng['serversettings']['mail_quota']['title'] = 'Mailbox-quota';
+$lng['emails']['quota'] = 'Квота';
+$lng['emails']['noquota'] = 'Без квоте';
+$lng['emails']['updatequota'] = 'Озвежи квоту';
+$lng['serversettings']['mail_quota']['title'] = 'Квота за сандуче поште';
 $lng['serversettings']['mail_quota']['description'] = 'The default quota for a new created mailboxes (MegaByte).';
 $lng['serversettings']['mail_quota_enabled']['title'] = 'Use mailbox-quota for customers';
 $lng['serversettings']['mail_quota_enabled']['description'] = 'Activate to use quotas on mailboxes. Default is <b>No</b> since this requires a special setup.';
@@ -901,18 +901,18 @@ $lng['serversettings']['mail_quota_enabled']['enforcelink'] = 'Click here to enf
 $lng['question']['admin_quotas_reallywipe'] = 'Do you really want to wipe all quotas on table mail_users? This cannot be reverted!';
 $lng['question']['admin_quotas_reallyenforce'] = 'Do you really want to enforce the default quota to all Users? This cannot be reverted!';
 $lng['error']['vmailquotawrong'] = 'The quotasize must be positive number.';
-$lng['customer']['email_quota'] = 'E-mail quota';
+$lng['customer']['email_quota'] = 'E-mail квота';
 $lng['customer']['email_imap'] = 'E-mail IMAP';
 $lng['customer']['email_pop3'] = 'E-mail POP3';
 $lng['customer']['mail_quota'] = 'Mailquota';
-$lng['panel']['megabyte'] = 'MegaByte';
-$lng['panel']['not_supported'] = 'Not supported in: ';
-$lng['emails']['quota_edit'] = 'Change E-Mail Quota';
+$lng['panel']['megabyte'] = 'Мегабајт';
+$lng['panel']['not_supported'] = 'Није подржано у: ';
+$lng['emails']['quota_edit'] = 'Измени E-Mail квоту';
 $lng['error']['allocatetoomuchquota'] = 'You tried to allocate %s MB Quota, but you do not have enough left.';
 
 // Autoresponder module
 
-$lng['menue']['email']['autoresponder'] = 'Autoresponder';
+$lng['menue']['email']['autoresponder'] = 'Аутоматски одговор';
 $lng['autoresponder']['active'] = 'Active';
 $lng['autoresponder']['autoresponder_add'] = 'Add autoresponder';
 $lng['autoresponder']['autoresponder_edit'] = 'Edit autoresponder';
@@ -940,10 +940,10 @@ $lng['admin']['froxlor_graphic']['description'] = 'What graphic should be shown 
 
 //improved froxlor
 
-$lng['menue']['phpsettings']['maintitle'] = 'PHP Configurations';
-$lng['admin']['phpsettings']['title'] = 'PHP Configuration';
-$lng['admin']['phpsettings']['description'] = 'Short description';
-$lng['admin']['phpsettings']['actions'] = 'Actions';
+$lng['menue']['phpsettings']['maintitle'] = 'PHP конфигурације';
+$lng['admin']['phpsettings']['title'] = 'PHP конфигурација';
+$lng['admin']['phpsettings']['description'] = 'Кратак опис';
+$lng['admin']['phpsettings']['actions'] = 'Акције';
 $lng['admin']['phpsettings']['activedomains'] = 'In use for domain(s)';
 $lng['admin']['phpsettings']['notused'] = 'Configuration not in use';
 $lng['admin']['misc'] = 'Miscellaneous';
@@ -957,7 +957,7 @@ $lng['question']['phpsetting_reallydelete'] = 'Do you really want to delete thes
 $lng['admin']['phpsettings']['addnew'] = 'Create new settings';
 $lng['error']['phpsettingidwrong'] = 'A PHP Configuration with this id doesn\'t exist';
 $lng['error']['descriptioninvalid'] = 'The description is too short, too long or contains illegal characters.';
-$lng['error']['info'] = 'Info';
+$lng['error']['info'] = 'Информације';
 $lng['admin']['phpconfig']['template_replace_vars'] = 'Variables that will be replaced in the configs';
 $lng['admin']['phpconfig']['pear_dir'] = 'Will be replaced with the global setting for the pear directory.';
 $lng['admin']['phpconfig']['open_basedir_c'] = 'Will insert a ; (semicolon) to comment-out/disable open_basedir when set';
@@ -969,7 +969,7 @@ $lng['admin']['phpconfig']['admin_email'] = 'Will be replaced with e-mail addres
 $lng['admin']['phpconfig']['domain'] = 'Will be replaced with the domain.';
 $lng['admin']['phpconfig']['customer'] = 'Will be replaced with the loginname of the customer who owns this domain.';
 $lng['admin']['phpconfig']['admin'] = 'Will be replaced with the loginname of the admin who owns this domain.';
-$lng['login']['backtologin'] = 'Back to login';
+$lng['login']['backtologin'] = 'Назад на пријаву';
 $lng['serversettings']['mod_fcgid']['starter']['title'] = 'Processes per Domain';
 $lng['serversettings']['mod_fcgid']['starter']['description'] = 'How many processes should be started/allowed per domain? The value 0 is recommended cause PHP will then manage the amount of processes itself very efficiently.';
 $lng['serversettings']['mod_fcgid']['wrapper']['title'] = 'Wrapper in Vhosts';
@@ -1224,7 +1224,7 @@ $lng['spf']['use_spf'] = 'Activate SPF for domains?';
 $lng['spf']['spf_entry'] = 'SPF entry for all domains';
 $lng['panel']['dirsmissing'] = 'The given directory could not be found.';
 $lng['panel']['toomanydirs'] = 'Too many subdirectories. Falling back to manual path-select.';
-$lng['panel']['abort'] = 'Abort';
+$lng['panel']['abort'] = 'Одустани';
 $lng['serversettings']['cron']['debug']['title'] = 'Cronscript debugging';
 $lng['serversettings']['cron']['debug']['description'] = 'Activate to keep the lockfile after a cron-run for debugging.<br /><b>Attention:</b>Keeping the lockfile can cause the next scheduled cron not to run properly.';
 $lng['autoresponder']['date_from'] = 'Start date';
@@ -1308,18 +1308,18 @@ $lng['crondesc']['cron_apsupdater'] = 'updating APS packages';
 $lng['crondesc']['cron_traffic'] = 'traffic calculation';
 $lng['crondesc']['cron_ticketsreset'] = 'resetting ticket-counters';
 $lng['crondesc']['cron_ticketarchive'] = 'archiving old tickets';
-$lng['cronmgmt']['seconds'] = 'seconds';
-$lng['cronmgmt']['minutes'] = 'minutes';
-$lng['cronmgmt']['hours'] = 'hours';
-$lng['cronmgmt']['days'] = 'days';
-$lng['cronmgmt']['weeks'] = 'weeks';
-$lng['cronmgmt']['months'] = 'months';
+$lng['cronmgmt']['seconds'] = 'секунди';
+$lng['cronmgmt']['minutes'] = 'минута';
+$lng['cronmgmt']['hours'] = 'сати';
+$lng['cronmgmt']['days'] = 'дана';
+$lng['cronmgmt']['weeks'] = 'недеља';
+$lng['cronmgmt']['months'] = 'месеци';
 $lng['admin']['cronjob_edit'] = 'Edit cronjob';
 $lng['cronjob']['cronjobsettings'] = 'Cronjob settings';
 $lng['cronjob']['cronjobintervalv'] = 'Runtime interval value';
 $lng['cronjob']['cronjobinterval'] = 'Runtime interval';
-$lng['panel']['options'] = 'Options';
-$lng['admin']['warning'] = 'WARNING - Please note!';
+$lng['panel']['options'] = 'Опције';
+$lng['admin']['warning'] = 'УПОЗОРЕЊЕ - забележите га!';
 $lng['cron']['changewarning'] = 'Changing these values can have a negative cause to the behavior of Froxlor and its automated tasks.<br /><br />Please only change values here, if you are sure you know what you are doing.';
 
 $lng['serversettings']['stdsubdomainhost']['title'] = 'Customer standard subdomain';
@@ -1565,28 +1565,28 @@ $lng['error']['user_banned'] = 'Your account has been locked. Please contact you
 $lng['serversettings']['validate_domain'] = 'Validate domain names';
 $lng['login']['combination_not_found'] = 'Combination of user and email adress not found.';
 $lng['customer']['generated_pwd'] = 'Password suggestion';
-$lng['customer']['usedmax'] = 'Used / Max';
-$lng['admin']['traffic'] = 'Traffic';
-$lng['admin']['domaintraffic'] = 'Domains';
-$lng['admin']['customertraffic'] = 'Customers';
-$lng['traffic']['customer'] = 'Customer';
-$lng['traffic']['domain'] = 'Domain';
-$lng['traffic']['trafficoverview'] = 'Traffic summary by';
-$lng['traffic']['months']['jan'] = 'Jan';
-$lng['traffic']['months']['feb'] = 'Feb';
-$lng['traffic']['months']['mar'] = 'Mar';
-$lng['traffic']['months']['apr'] = 'Apr';
-$lng['traffic']['months']['may'] = 'May';
-$lng['traffic']['months']['jun'] = 'Jun';
-$lng['traffic']['months']['jul'] = 'Jul';
-$lng['traffic']['months']['aug'] = 'Aug';
-$lng['traffic']['months']['sep'] = 'Sep';
-$lng['traffic']['months']['oct'] = 'Oct';
-$lng['traffic']['months']['nov'] = 'Nov';
-$lng['traffic']['months']['dec'] = 'Dec';
-$lng['traffic']['months']['total'] = 'Total';
-$lng['traffic']['details'] = 'Details';
-$lng['menue']['traffic']['table'] = 'Traffic';
+$lng['customer']['usedmax'] = 'Коришћено / Макс.';
+$lng['admin']['traffic'] = 'Проток';
+$lng['admin']['domaintraffic'] = 'Домени';
+$lng['admin']['customertraffic'] = 'Корисници';
+$lng['traffic']['customer'] = 'Корисник';
+$lng['traffic']['domain'] = 'Домен';
+$lng['traffic']['trafficoverview'] = 'Преглед протока по';
+$lng['traffic']['months']['jan'] = 'Јан';
+$lng['traffic']['months']['feb'] = 'Феб';
+$lng['traffic']['months']['mar'] = 'Мар';
+$lng['traffic']['months']['apr'] = 'Апр';
+$lng['traffic']['months']['may'] = 'Мај';
+$lng['traffic']['months']['jun'] = 'Јун';
+$lng['traffic']['months']['jul'] = 'Јул';
+$lng['traffic']['months']['aug'] = 'Авг';
+$lng['traffic']['months']['sep'] = 'Сеп';
+$lng['traffic']['months']['oct'] = 'Окт';
+$lng['traffic']['months']['nov'] = 'Нов';
+$lng['traffic']['months']['dec'] = 'Дец';
+$lng['traffic']['months']['total'] = 'Укупно';
+$lng['traffic']['details'] = 'Детаљи';
+$lng['menue']['traffic']['table'] = 'Проток';
 $lng['error']['admin_domain_emailsystemhostname'] = 'Sorry, the system - hostname may not be used as a customer domain';
 $lng['backup'] = 'Backup';
 $lng['backup_allowed'] = 'Backup allowed';
@@ -1882,7 +1882,7 @@ $lng['logrotate_keep'] = 'How many logfiles should be kept?';
 $lng['admin']['assignedmax'] = 'Assigned / Max';
 $lng['admin']['usedmax'] = 'Used / Max';
 $lng['admin']['used'] = 'Used';
-$lng['mysql']['size'] = 'Database size (MB)';
+$lng['mysql']['size'] = 'Величина базе података (MB)';
 
 $lng['error']['invalidhostname'] = 'Hostname can\'t be empty nor can it consist only of whitespaces';
 
