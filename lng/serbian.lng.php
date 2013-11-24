@@ -28,12 +28,12 @@ $lng['panel']['create'] = 'направи';
 $lng['panel']['save'] = 'сачувај';
 $lng['panel']['yes'] = 'да';
 $lng['panel']['no'] = 'не';
-$lng['panel']['emptyfornochanges'] = 'empty for no changes';
-$lng['panel']['emptyfordefault'] = 'empty for defaults';
+$lng['panel']['emptyfornochanges'] = 'празно уколико нема измена';
+$lng['panel']['emptyfordefault'] = 'подразумевано празно';
 $lng['panel']['path'] = 'Путања';
-$lng['panel']['toggle'] = 'Toggle';
+$lng['panel']['toggle'] = 'Укључи/искључи';
 $lng['panel']['next'] = 'следеће';
-$lng['panel']['dirsmissing'] = 'Can not find or read the directory!';
+$lng['panel']['dirsmissing'] = 'Не могу да пронађем или да прочитам директоријум!';
 
 /**
  * Login
@@ -42,8 +42,8 @@ $lng['panel']['dirsmissing'] = 'Can not find or read the directory!';
 $lng['login']['username'] = 'Корисничко име';
 $lng['login']['password'] = 'Лозинка';
 $lng['login']['language'] = 'Језик';
-$lng['login']['login'] = 'Login';
-$lng['login']['logout'] = 'Logout';
+$lng['login']['login'] = 'Пријави ме';
+$lng['login']['logout'] = 'Одјави ме';
 $lng['login']['profile_lng'] = 'Језик профила';
 
 /**
@@ -76,40 +76,40 @@ $lng['customer']['unlimited'] = '∞';
  * Customermenue
  */
 
-$lng['menue']['main']['main'] = 'Main';
-$lng['menue']['main']['changepassword'] = 'Change password';
-$lng['menue']['main']['changelanguage'] = 'Change language';
+$lng['menue']['main']['main'] = 'Основно';
+$lng['menue']['main']['changepassword'] = 'Измена лозинке';
+$lng['menue']['main']['changelanguage'] = 'Измена језика';
 $lng['menue']['email']['email'] = 'E-mail';
-$lng['menue']['email']['emails'] = 'Addresses';
-$lng['menue']['email']['webmail'] = 'webmail';
+$lng['menue']['email']['emails'] = 'Адресе';
+$lng['menue']['email']['webmail'] = 'Webmail';
 $lng['menue']['mysql']['mysql'] = 'MySQL';
-$lng['menue']['mysql']['databases'] = 'Databases';
+$lng['menue']['mysql']['databases'] = 'Базе података';
 $lng['menue']['mysql']['phpmyadmin'] = 'phpMyAdmin';
-$lng['menue']['domains']['domains'] = 'Domains';
-$lng['menue']['domains']['settings'] = 'Settings';
+$lng['menue']['domains']['domains'] = 'Домени';
+$lng['menue']['domains']['settings'] = 'Подешавања';
 $lng['menue']['ftp']['ftp'] = 'FTP';
-$lng['menue']['ftp']['accounts'] = 'Accounts';
+$lng['menue']['ftp']['accounts'] = 'Налози';
 $lng['menue']['ftp']['webftp'] = 'WebFTP';
-$lng['menue']['extras']['extras'] = 'Extras';
-$lng['menue']['extras']['directoryprotection'] = 'Directory protection';
-$lng['menue']['extras']['pathoptions'] = 'Path options';
+$lng['menue']['extras']['extras'] = 'Додаци';
+$lng['menue']['extras']['directoryprotection'] = 'Заштита директоријума';
+$lng['menue']['extras']['pathoptions'] = 'Подешавање путање';
 
 /**
  * Index
  */
 
-$lng['index']['customerdetails'] = 'Customer details';
-$lng['index']['accountdetails'] = 'Account details';
+$lng['index']['customerdetails'] = 'Детаљи о кориснику';
+$lng['index']['accountdetails'] = 'Детаљи о налогу';
 
 /**
  * Change Password
  */
 
-$lng['changepassword']['old_password'] = 'Old password';
-$lng['changepassword']['new_password'] = 'New password';
-$lng['changepassword']['new_password_confirm'] = 'New password (confirm)';
-$lng['changepassword']['new_password_ifnotempty'] = 'New password (empty = no change)';
-$lng['changepassword']['also_change_ftp'] = ' also change password of the main FTP account';
+$lng['changepassword']['old_password'] = 'Стара лозинка';
+$lng['changepassword']['new_password'] = 'Нова лозинка';
+$lng['changepassword']['new_password_confirm'] = 'Нова лозинка (потврда)';
+$lng['changepassword']['new_password_ifnotempty'] = 'Нова лозинка (празно = без измене)';
+$lng['changepassword']['also_change_ftp'] = ' такође промени лозинку за основни FTP налог';
 
 /**
  * Domains
