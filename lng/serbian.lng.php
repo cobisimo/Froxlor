@@ -128,7 +128,7 @@ $lng['domains']['noaliasdomain'] = 'Без синонима за домен';
  * E-mails
  */
 
-$lng['emails']['description'] = 'Овде можете направити и изменити адресе ел. поште под вашим доменима.<br />Налог је као поштанско сандуче испред ваше куће. Ако вам неко пошаље електронску пошту (e-mail), она ће завршити у вашем налогу.<br /><br />Како би преузели ел. пошту са свог налога користите следеће параметре у свом програму за преглед ел. поште: (<i>Накошене</i> податке је потербно изменити да одговарају онима које унесете приликом формирања налога!)<br />Име домаћина (домена): <b><i>назив домена</i></b><br />Корисничко име: <b><i>име налога или адреса ел. поште</i></b><br />Лозинка: <b><i>лозинка коју сте изабрали</i></b>';
+$lng['emails']['description'] = 'Овде можете направити и изменити адресе ел. поште под вашим доменима.<br />Налог је као поштанско сандуче испред ваше куће. Ако вам неко пошаље електронску пошту (e-mail), она ће завршити у вашем налогу.<br /><br />Како би преузели ел. пошту са свог налога користите следеће параметре у свом програму за преглед ел. поште: (<b><i>Подебљане</i></b> податке је потербно изменити да одговарају онима које унесете приликом формирања налога!)<br />Име домена: <b><i>име вашег домена</i></b><br />Корисничко име: <b><i>име налога или адреса ел. поште</i></b><br />Лозинка: <b><i>лозинка коју сте изабрали</i></b>';
 $lng['emails']['emailaddress'] = 'E-mail-address';
 $lng['emails']['emails_add'] = 'Направи налог ел. поште';
 $lng['emails']['emails_edit'] = 'Измени адресе ел. поште';
@@ -482,10 +482,10 @@ $lng['serversettings']['deactivateddocroot']['description'] = 'When a user is de
 
 // ADDED IN 1.2.16-svn4
 
-$lng['panel']['reset'] = 'discard changes';
-$lng['admin']['accountsettings'] = 'Account settings';
-$lng['admin']['panelsettings'] = 'Panel settings';
-$lng['admin']['systemsettings'] = 'System settings';
+$lng['panel']['reset'] = 'поништи измене';
+$lng['admin']['accountsettings'] = 'Подешавања налога';
+$lng['admin']['panelsettings'] = 'Подешавања панела';
+$lng['admin']['systemsettings'] = 'Подешавања система';
 $lng['admin']['webserversettings'] = 'Webserver settings';
 $lng['admin']['mailserversettings'] = 'Mailserver settings';
 $lng['admin']['nameserversettings'] = 'Nameserver settings';
@@ -502,10 +502,10 @@ $lng['admin']['templates']['TRAFFICUSED'] = 'Replaced with the traffic in MB, wh
 
 // ADDED IN 1.2.16-svn7
 
-$lng['admin']['subcanemaildomain']['never'] = 'Never';
+$lng['admin']['subcanemaildomain']['never'] = 'Никад';
 $lng['admin']['subcanemaildomain']['choosableno'] = 'Choosable, default no';
 $lng['admin']['subcanemaildomain']['choosableyes'] = 'Choosable, default yes';
-$lng['admin']['subcanemaildomain']['always'] = 'Always';
+$lng['admin']['subcanemaildomain']['always'] = 'Увек';
 $lng['changepassword']['also_change_webalizer'] = ' also change password for the statistics page';
 
 // ADDED IN 1.2.16-svn8
@@ -514,11 +514,11 @@ $lng['serversettings']['mailpwcleartext']['title'] = 'Also save passwords of mai
 $lng['serversettings']['mailpwcleartext']['description'] = 'If this is set to yes, all passwords will also be saved unencrypted (clear text, plain readable for everyone with database access) in the mail_users-table. Only activate this if you intend to use SASL!';
 $lng['serversettings']['mailpwcleartext']['removelink'] = 'Click here to wipe all unencrypted passwords from the table.';
 $lng['question']['admin_cleartextmailpws_reallywipe'] = 'Do you really want to wipe all unencrypted mail account passwords from the table mail_users? This cannot be reverted!';
-$lng['admin']['configfiles']['overview'] = 'Overview';
-$lng['admin']['configfiles']['wizard'] = 'Wizard';
-$lng['admin']['configfiles']['distribution'] = 'Distribution';
-$lng['admin']['configfiles']['service'] = 'Service';
-$lng['admin']['configfiles']['daemon'] = 'Daemon';
+$lng['admin']['configfiles']['overview'] = 'Преглед';
+$lng['admin']['configfiles']['wizard'] = 'Чаробњак';
+$lng['admin']['configfiles']['distribution'] = 'Дистрибуција';
+$lng['admin']['configfiles']['service'] = 'Сервис';
+$lng['admin']['configfiles']['daemon'] = 'Демон';
 $lng['admin']['configfiles']['http'] = 'Webserver (HTTP)';
 $lng['admin']['configfiles']['dns'] = 'Nameserver (DNS)';
 $lng['admin']['configfiles']['mail'] = 'Mailserver (IMAP/POP3)';
@@ -597,12 +597,12 @@ $lng['ticket']['ticket_reopen'] = 'Reopen ticket';
 $lng['ticket']['ticket_newcateory'] = 'Create new category';
 $lng['ticket']['ticket_editcateory'] = 'Edit category';
 $lng['ticket']['ticket_view'] = 'View ticketcourse';
-$lng['ticket']['ticketcount'] = 'Tickets';
-$lng['ticket']['ticket_answers'] = 'Replies';
+$lng['ticket']['ticketcount'] = 'Картица';
+$lng['ticket']['ticket_answers'] = 'Одговора';
 $lng['ticket']['lastchange'] = 'Last action';
 $lng['ticket']['subject'] = 'Тема';
 $lng['ticket']['status'] = 'Статус';
-$lng['ticket']['lastreplier'] = 'Last replier';
+$lng['ticket']['lastreplier'] = 'Аутор последњег одговора';
 $lng['ticket']['priority'] = 'Приоритет';
 $lng['ticket']['low'] = 'Низак';
 $lng['ticket']['normal'] = 'Нормалан';
@@ -633,9 +633,9 @@ $lng['ticket']['nocustomer'] = 'Нез избора';
 $lng['ticket']['archivesearch'] = 'Archive searchresults';
 $lng['ticket']['noresults'] = 'No tickets found';
 $lng['ticket']['notmorethanxopentickets'] = 'Due to spam-protection you cannot have more than %s open tickets';
-$lng['ticket']['supportstatus'] = 'Support-Status';
-$lng['ticket']['supportavailable'] = '<span class="ticket_low">Our support engineers are available and ready to assist.</span>';
-$lng['ticket']['supportnotavailable'] = '<span class="ticket_high">Our support engineers are currently not available</span>';
+$lng['ticket']['supportstatus'] = 'Статус подршке';
+$lng['ticket']['supportavailable'] = '<span class="ticket_low">Наши инжењери подршке су доступни и спремни да вам помогну.</span>';
+$lng['ticket']['supportnotavailable'] = '<span class="ticket_high">Наши инжењери подршке тренутно нису доступни.</span>';
 $lng['admin']['templates']['ticket'] = 'Notification-mails for support-tickets';
 $lng['admin']['templates']['SUBJECT'] = 'Replaced with the support-ticket subject';
 $lng['admin']['templates']['new_ticket_for_customer'] = 'Customer-information that the ticket has been sent';
@@ -1213,9 +1213,9 @@ $lng['error']['usernamealreadyexists'] = 'The username %s already exists.';
 $lng['error']['plausibilitychecknotunderstood'] = 'Answer of plausibility check not understood.';
 $lng['error']['errorwhensaving'] = 'An error occured when saving the field %s';
 
-$lng['success']['success'] = 'Information';
-$lng['success']['clickheretocontinue'] = 'Click here to continue';
-$lng['success']['settingssaved'] = 'The settings have been successfully saved.';
+$lng['success']['success'] = 'Информација';
+$lng['success']['clickheretocontinue'] = 'Кликните овде за наставак';
+$lng['success']['settingssaved'] = 'Подешавања су успешно сачувана.';
 
 // ADDED IN FROXLOR 0.9
 
@@ -1810,7 +1810,7 @@ $lng['country']['SM'] = "San Marino";
 $lng['country']['ST'] = "Sao Tome and Principe";
 $lng['country']['SA'] = "Saudi Arabia";
 $lng['country']['SN'] = "Senegal";
-$lng['country']['RS'] = "Serbia";
+$lng['country']['RS'] = "Србија";
 $lng['country']['SC'] = "Seychelles";
 $lng['country']['SL'] = "Sierra Leone";
 $lng['country']['SG'] = "Singapore";
@@ -1864,7 +1864,7 @@ $lng['country']['ZM'] = "Zambia";
 $lng['country']['ZW'] = "Zimbabwe";
 
 // ADDED IN FROXLOR 0.9.22-svn1
-$lng['diskquota'] = 'Quota';
+$lng['diskquota'] = 'Квота';
 $lng['serversettings']['diskquota_enabled'] = 'Quota activated?';
 $lng['serversettings']['diskquota_repquota_path']['description'] = 'Path to repquota';
 $lng['serversettings']['diskquota_quotatool_path']['description'] = 'Path to quotatool';
