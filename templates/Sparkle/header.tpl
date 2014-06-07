@@ -3,42 +3,38 @@
 <head>
 	<meta charset="utf-8" />
 	<meta http-equiv="Default-Style" content="text/css" />
-	<if $settings['panel']['no_robots'] == '0'>
+	<if Settings::Get('panel.no_robots') == '0'>
 	<meta name="robots" content="noindex, nofollow, noarchive" />
 	<meta name="GOOGLEBOT" content="nosnippet" />
 	</if>
 	<script type="text/javascript" src="js/jquery.min.js"></script>
 	<script type="text/javascript" src="js/jquery-ui.min.js"></script>
-	<!--[if lt IE 9]><script src="js/html5shiv.js"></script><![endif]-->
+	<!--[if lt IE 9]><script type="text/javascript" src="js/html5shiv.min.js"></script><![endif]-->
 	<if isset($intrafficpage)>
-	<!--[if lt IE 9]><script language="javascript" type="text/javascript" src="js/excanvas.min.js"></script><![endif]-->
-	<script language="javascript" type="text/javascript" src="js/jquery.jqplot.min.js"></script>
-	<script language="javascript" type="text/javascript" src="js/plugins/jqplot.barRenderer.min.js"></script>
-	<script language="javascript" type="text/javascript" src="js/plugins/jqplot.categoryAxisRenderer.min.js"></script>
-	<script language="javascript" type="text/javascript" src="js/plugins/jqplot.pointLabels.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/jquery.jqplot.min.css" />
-	<script language="javascript" type="text/javascript" src="templates/{$theme}/assets/js/traffic.js"></script>
+	<!--[if lt IE 9]><script type="text/javascript" src="js/excanvas.min.js"></script><![endif]-->
+	<script type="text/javascript" src="js/jquery.flot.min.js"></script>
+	<script type="text/javascript" src="js/plugins/jquery.flot.resize.min.js"></script>
+	<script type="text/javascript" src="templates/{$theme}/assets/js/traffic.js"></script>
 	</if>
-	<if $settings['panel']['use_webfonts'] == '1'>
-		<link href="//fonts.googleapis.com/css?family={$settings['panel']['webfont']}" rel="stylesheet">
+	<script type="text/javascript" src="templates/{$theme}/assets/js/tipper.min.js"></script>
+	<script type="text/javascript" src="templates/{$theme}/assets/js/jcanvas.min.js"></script>
+	<script type="text/javascript" src="templates/{$theme}/assets/js/circular.js"></script>
+	<if Settings::Get('panel.use_webfonts') == '1'>
+		<link href="//fonts.googleapis.com/css?family={$webfont}" rel="stylesheet">
 	</if>
-	<link href="templates/{$theme}/assets/css/main.css" rel="stylesheet" type="text/css" />
-	<!--[if IE]><link rel="stylesheet" href="templates/{$theme}/css/main_ie.css" type="text/css" /><![endif]-->
+	{$css}
+	<!--[if IE]><link rel="stylesheet" href="templates/{$theme}/assets/css/main_ie.css" type="text/css" /><![endif]-->
 	<link href="css/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
-	<script type="text/javascript" src="templates/{$theme}/assets/js/main.js"></script>
-	<if $settings['panel']['natsorting'] == '0'>
-		<script type="text/javascript" src="templates/{$theme}/assets/js/jquery.dataTables.js"></script>
-	</if>
-	<if $settings['panel']['natsorting'] == '1'>
-		<script type="text/javascript" src="templates/{$theme}/assets/js/jquery.dataTables.naturalSorting.js"></script>
-	</if>
+	{$js}
 	<link href="templates/{$theme}/assets/img/favicon.ico" rel="icon" type="image/x-icon" />
+	<link href="templates/{$theme}/assets/img/touchicon.png" rel="shortcut" />
+	<link href="templates/{$theme}/assets/img/touchicon.png" rel="apple-touch-icon" />
 	<title><if isset($userinfo['loginname']) && $userinfo['loginname'] != ''>{$userinfo['loginname']} - </if>Froxlor Server Management Panel</title>
+	<if Settings::Get('panel.use_webfonts') == '1'>
 	<style type="text/css">
-	body {
-        font-family: <if $settings['panel']['use_webfonts'] == '1'>{$webfont},</if> Verdana, Geneva, sans-serif;
-	}
+		body { font-family: {$webfont}, 'Lucida Grande', 'Lucida Sans Unicode', Helvetica, Arial, Verdana, sans-serif; }
 	</style>
+	</if>
 </head>
 <body>
 
@@ -47,27 +43,42 @@
 	<hgroup>
 		<h1>Froxlor Server Management Panel</h1>
 	</hgroup>
-	<img src="{$header_logo}" alt="Froxlor Server Management Panel" />
+	<a href="{$linker->getLink(array('section' => 'index'))}">
+		<img src="{$header_logo}" alt="Froxlor Server Management Panel" class="small" />
+	</a>
 	<div class="topheader_navigation">
 		<ul class="topheadernav">
-			<li><a href="{$linker->getLink(array('section' => 'index'))}">{$lng['admin']['overview']}</a></li>
-			<li><a href="#">{$lng['panel']['options']}</a>
+			<if Settings::Get('ticket.enabled') == 1>
+				<li>
+					<a href="{$linker->getLink(array('section' => 'tickets', 'page' => 'tickets'))}">
+						<if 0 < $awaitingtickets>
+							<img src="templates/{$theme}/assets/img/icons/menubar_tickets.png" alt="{$lng['menue']['ticket']['ticket']}" />
+							<span class="countbubble">{$awaitingtickets}</span>
+						<else>
+							<img src="templates/{$theme}/assets/img/icons/menubar_tickets_null.png" alt="{$lng['menue']['ticket']['ticket']}" />
+						</if>
+					</a>
+				</li>
+			</if>
+			<li>{$userinfo['loginname']}</li>
+			<li><a href="{$linker->getLink(array('section' => 'index'))}">{$lng['panel']['dashboard']}</a></li>
+			<li><a href="#">{$lng['panel']['options']}&nbsp;&#x25BE;</a>
 				<ul>
 					<li><a href="{$linker->getLink(array('section' => 'index', 'page' => 'change_password'))}">{$lng['login']['password']}</a></li>
 					<li><a href="{$linker->getLink(array('section' => 'index', 'page' => 'change_language'))}">{$lng['login']['language']}</a></li>
-					<if $settings['panel']['allow_theme_change_admin'] == '1' && $userinfo['adminsession'] == 1>
+					<if Settings::Get('panel.allow_theme_change_admin') == '1' && $userinfo['adminsession'] == 1>
 						<li><a href="{$linker->getLink(array('section' => 'index', 'page' => 'change_theme'))}">{$lng['panel']['theme']}</a></li>
 					</if>
-					<if $settings['panel']['allow_theme_change_customer'] == '1' && $userinfo['adminsession'] == 0>
+					<if Settings::Get('panel.allow_theme_change_customer') == '1' && $userinfo['adminsession'] == 0>
 						<li><a href="{$linker->getLink(array('section' => 'index', 'page' => 'change_theme'))}">{$lng['panel']['theme']}</a></li>
 					</if>
 				</ul>
 			</li>
-			<li><a href="{$linker->getLink(array('section' => 'index', 'action' => 'logout'))}">{$lng['login']['logout']} {$userinfo['loginname']}</a></li>
+			<li><a href="{$linker->getLink(array('section' => 'index', 'action' => 'logout'))}" class="logoutlink">{$lng['login']['logout']}</a></li>
 		</ul>
 	</div>
 </header>
-
-	<nav>$navigation</nav>
-	<div class="main bradius">
+<div class="content">
+	<nav id="sidenavigation">$navigation</nav>
+	<div class="main" id="maincontent">
 </if>

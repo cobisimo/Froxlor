@@ -16,7 +16,7 @@
  */
 
 define('AREA', 'admin');
-require_once('./lib/init.php');
+require './lib/init.php';
 
 if (isset($_POST['id'])) {
 	$id = intval($_POST['id']);
@@ -33,14 +33,12 @@ if ($page == 'cronjobs' || $page == 'overview') {
 			'c.interval' => $lng['cron']['interval'],
 			'c.isactive' => $lng['cron']['isactive']
 		);
-		$paging = new paging($userinfo, $db, TABLE_PANEL_CRONRUNS, $fields, $settings['panel']['paging'], $settings['panel']['natsorting']);
+		$paging = new paging($userinfo, TABLE_PANEL_CRONRUNS, $fields);
 
-		/*
-		 * @TODO Fix sorting
-		 */
 		$crons = '';
-		$result = $db->query("SELECT `c`.* FROM `" . TABLE_PANEL_CRONRUNS . "` `c` ORDER BY `cronfile` ASC");
-		$paging->setEntries($db->num_rows($result));
+		$result_stmt = Database::prepare("SELECT `c`.* FROM `" . TABLE_PANEL_CRONRUNS . "` `c` ORDER BY `module` ASC, `cronfile` ASC");
+		Database::pexecute($result_stmt);
+		$paging->setEntries(Database::num_rows());
 		$sortcode = $paging->getHtmlSortCode($lng);
 		$arrowcode = $paging->getHtmlArrowCode($filename . '?page=' . $page . '&s=' . $s);
 		$searchcode = $paging->getHtmlSearchCode($lng);
@@ -48,8 +46,15 @@ if ($page == 'cronjobs' || $page == 'overview') {
 
 		$i = 0;
 		$count = 0;
+		$cmod = '';
 
-		while ($row = $db->fetch_array($result)) {
+		while ($row = $result_stmt->fetch(PDO::FETCH_ASSOC)) {
+			if ($cmod != $row['module']) {
+				$_mod = explode("/", $row['module']);
+				$module = ucfirst($_mod[1]);
+				eval("\$crons.=\"" . getTemplate('cronjobs/cronjobs_cronjobmodule') . "\";");
+				$cmod = $row['module'];
+			}
 			if ($paging->checkDisplay($i)) {
 				$row = htmlentities_array($row);
 
@@ -72,7 +77,9 @@ if ($page == 'cronjobs' || $page == 'overview') {
 		 * @TODO later
 		 */
 	} elseif ($action == 'edit' && $id != 0) {
-		$result = $db->query_first("SELECT * FROM `" . TABLE_PANEL_CRONRUNS . "` WHERE `id`='" . (int)$id . "'");
+		$result_stmt = Database::prepare("SELECT * FROM `" . TABLE_PANEL_CRONRUNS . "` WHERE `id`= :id");
+		Database::pexecute($result_stmt, array('id' => $id));
+		$result = $result_stmt->fetch(PDO::FETCH_ASSOC);
 		if ($result['cronfile'] != '') {
 			if (isset($_POST['send']) && $_POST['send'] == 'send') {
 				$isactive = isset($_POST['isactive']) ? 1 : 0;
@@ -85,20 +92,24 @@ if ($page == 'cronjobs' || $page == 'overview') {
 
 				$interval = $interval_value . ' ' . strtoupper($interval_interval);
 
-				$db->query("UPDATE `" . TABLE_PANEL_CRONRUNS . "` 
-							SET `isactive` = '".(int)$isactive."',
-							`interval` = '".$interval."'
-							WHERE `id` = '" . (int)$id . "'");
+				$upd = Database::prepare("
+					UPDATE `" . TABLE_PANEL_CRONRUNS . "`
+					SET `isactive` = :isactive, `interval` = :int
+					WHERE `id` = :id"
+				);
+				Database::pexecute($upd, array('isactive' => $isactive, 'int' => $interval, 'id' => $id));
 
-				redirectTo($filename, Array('page' => $page, 's' => $s));
+				// insert task to re-generate the cron.d-file
+				inserttask('99');
+
+				redirectTo($filename, array('page' => $page, 's' => $s));
 			} else {
-				//$isactive = makeyesno('isactive', '1', '0', $result['isactive']);
+
 				// interval
 				$interval_nfo = explode(' ', $result['interval']);
 				$interval_value = $interval_nfo[0];
 
 				$interval_interval = '';
-				$interval_interval .= makeoption($lng['cronmgmt']['seconds'], 'SECOND', $interval_nfo[1]);
 				$interval_interval .= makeoption($lng['cronmgmt']['minutes'], 'MINUTE', $interval_nfo[1]);
 				$interval_interval .= makeoption($lng['cronmgmt']['hours'], 'HOUR', $interval_nfo[1]);
 				$interval_interval .= makeoption($lng['cronmgmt']['days'], 'DAY', $interval_nfo[1]);

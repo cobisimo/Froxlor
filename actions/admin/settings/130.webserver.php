@@ -31,6 +31,7 @@ return array(
 					'option_mode' => 'one',
 					'option_options' => array('apache2' => 'Apache 2', 'lighttpd' => 'ligHTTPd', 'nginx' => 'Nginx'),
 					'save_method' => 'storeSettingField',
+					'plausibility_check_method' => 'checkPhpInterfaceSetting',
 					'overview_option' => true
 					),
 				'system_apache_24' => array(
@@ -81,7 +82,7 @@ return array(
 					'settinggroup' => 'system',
 					'varname' => 'apacheconf_htpasswddir',
 					'type' => 'string',
-					'string_type' => 'dir',
+					'string_type' => 'confdir',
 					'default' => '/etc/apache2/htpasswd/',
 					'save_method' => 'storeSettingField',
 					),
@@ -99,8 +100,8 @@ return array(
 					'settinggroup' => 'system',
 					'varname' => 'customer_ssl_path',
 					'type' => 'string',
-					'string_type' => 'dir',
-					'default' => '/etc/apache2/ssl/',
+					'string_type' => 'confdir',
+					'default' => '/etc/ssl/froxlor-custom/',
 					'save_method' => 'storeSettingField',
 					),
 				'system_phpappendopenbasedir' => array(

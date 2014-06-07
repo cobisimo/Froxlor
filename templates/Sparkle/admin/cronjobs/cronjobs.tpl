@@ -4,9 +4,16 @@ $header
 			<h2><img src="templates/{$theme}/assets/img/icons/clock_big.png" alt="" />&nbsp;
 			{$lng['admin']['cron']['cronsettings']}</h2>
                 </header>
-
+                
+		<div class="messagewrapperfull">
+		<div class="warningcontainer bradius">
+			<div class="warningtitle">{$lng['admin']['warning']}</div>
+			<div class="warning">{$lng['cron']['changewarning']}</div>
+		</div>
+		</div>
+		
 		<section>
-			<table class="bradius">
+			<table class="full">
 			<thead>
 				<tr>
 					<th>{$lng['cron']['description']}</th>
@@ -21,13 +28,6 @@ $header
 			</tbody>
 			</table>
 		</section>
-
-		<div class="messagewrapperfull">
-		<div class="warningcontainer bradius">
-			<div class="warningtitle">{$lng['admin']['warning']}</div>
-			<div class="warning">{$lng['cron']['changewarning']}</div>
-		</div>
-		</div>
 
 	</article>
 $footer

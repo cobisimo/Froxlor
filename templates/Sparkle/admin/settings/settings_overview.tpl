@@ -7,14 +7,25 @@
 			</h2>
 		</header>
 		
-		<section class="fullform bradius">
-        	<table class="formtable">
-			$fields
-			<tr>
-				<td class="maintitle_apply_right" nowrap="nowrap" colspan="2">
-					<input class="bottom" type="reset" value="{$lng['panel']['reset']}" /><input class="bottom" type="submit" value="{$lng['panel']['save']}" />
-				</td>
-			</tr>
-		</table>
+		<section>
+			<table class="full">
+				<thead>
+					<tr>
+						<th colspan="3" class="right">
+							<input class="bottom" type="reset" value="{$lng['panel']['reset']}" /><input class="bottom" type="submit" value="{$lng['panel']['save']}" />
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+				$fields
+				</tbody>
+				<tfoot>
+					<tr>
+						<td nowrap="nowrap" colspan="3" class="right">
+							<input class="bottom" type="reset" value="{$lng['panel']['reset']}" /><input class="bottom" type="submit" value="{$lng['panel']['save']}" />
+						</td>
+					</tr>
+				</tfoot>
+			</table>
 		</section>
 </article>

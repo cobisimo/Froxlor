@@ -1,4 +1,4 @@
-<?php
+<?php if (!defined('MASTER_CRONJOB')) die('You cannot access this file directly!');
 
 /**
  * This file is part of the Froxlor project.
@@ -20,22 +20,33 @@
 
 fwrite($debugHandler, "calculating mailspace usage\n");
 
-$maildirs = $db->query("SELECT `id`, CONCAT(`homedir`, `maildir`) AS `maildirpath` FROM `".TABLE_MAIL_USERS."` ORDER BY `id`");
+$maildirs_stmt = Database::query("
+	SELECT `id`, CONCAT(`homedir`, `maildir`) AS `maildirpath` FROM `".TABLE_MAIL_USERS."` ORDER BY `id`
+");
 
-while ($maildir = $db->fetch_array($maildirs)) {
+$upd_stmt = Database::prepare("
+	UPDATE `".TABLE_MAIL_USERS."` SET `mboxsize` = :size WHERE `id` = :id
+");
+
+while ($maildir = $maildirs_stmt->fetch(PDO::FETCH_ASSOC)) {
 
 	$_maildir = makeCorrectDir($maildir['maildirpath']);
 
-	if (file_exists($_maildir) 
+	if (file_exists($_maildir)
 		&& is_dir($_maildir)
 	) {
-		$back = safe_exec('du -sb ' . escapeshellarg($_maildir) . '');
+		$back = safe_exec('du -sk ' . escapeshellarg($_maildir) . '');
 		foreach ($back as $backrow) {
 			$emailusage = explode(' ', $backrow);
 		}
 		$emailusage = floatval($emailusage['0']);
+
+		// as freebsd does not have the -b flag for 'du' which gives
+		// the size in bytes, we use "-sk" for all and calculate from KiB
+		$emailusage *= 1024;
+
 		unset($back);
-		$db->query("UPDATE `".TABLE_MAIL_USERS."` SET `mboxsize` = '".(int)$emailusage."' WHERE `id` ='".(int)$maildir['id']."'");
+		Database::pexecute($upd_stmt, array('size' => $emailusage, 'id' => $maildir['id']));
 	} else {
 		fwrite($debugHandler, 'maildir ' . $_maildir . ' does not exist' . "\n");
 	}

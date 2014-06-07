@@ -2,33 +2,25 @@ $header
 	<article>
 		<header>
 			<h2>
-				<img src="templates/{$theme}/assets/img/{$image}" alt="{$title}" />&nbsp;
+				<img src="templates/{$theme}/assets/img/icons/phpsettings_edit_big.png" alt="{$title}" />&nbsp;
 				{$title}
 			</h2>
 		</header>
 
-		<section class="fullform bradius">
+		<section>
 
 			<form action="{$linker->getLink(array('section' => 'phpsettings'))}" method="post" enctype="application/x-www-form-urlencoded">
-				<fieldset>
-					<legend>Froxlor&nbsp;-&nbsp;{$title}</legend>
+				<input type="hidden" name="s" value="$s"/>
+				<input type="hidden" name="page" value="$page"/>
+				<input type="hidden" name="action" value="edit"/>
+				<input type="hidden" name="id" value="$id"/>
+				<input type="hidden" name="send" value="send" />
 
-					<table class="formtable">
-						{$phpconfig_edit_form}
-					</table>
-
-					<p style="display: none;">
-						<input type="hidden" name="s" value="$s"/>
-						<input type="hidden" name="page" value="$page"/>
-						<input type="hidden" name="action" value="edit"/>
-						<input type="hidden" name="id" value="$id"/>
-						<input type="hidden" name="send" value="send" />
-					</p>
-				</fieldset>
+				<table class="full">
+					{$phpconfig_edit_form}
+				</table>
 			</form>
-
 		</section>
-
 	</article>
 	<br />
 	<article>
@@ -40,7 +32,7 @@ $header
 		
 		<section>
 			
-			<table class="bradius">
+			<table class="full">
 			<thead>
 				<tr>
 					<th>{$lng['panel']['variable']}</th>
@@ -48,11 +40,6 @@ $header
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td colspan="2">
-						<strong>{$lng['admin']['phpconfig']['template_replace_vars']}</strong>
-					</td>
-				</tr>
 				<tr>
 					<td><em>{PEAR_DIR}</em></td>
 					<td>{$lng['admin']['phpconfig']['pear_dir']}</td>

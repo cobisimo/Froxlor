@@ -7,19 +7,20 @@ $header
 		</h2>
 	</header>
 
-	<section class="fullform bradius">
+	<section>
 
 		<form action="{$linker->getLink(array('section' => 'email'))}" method="post" enctype="application/x-www-form-urlencoded">
-			<fieldset>
-				<legend>Froxlor&nbsp;-&nbsp;{$title}</legend>
-
-				<table class="formtable">
-					{$email_edit_form}
+			<table class="full">
+				<thead>
+					<tr><th colspan="2"></th></tr>
+				</thead>
+				{$email_edit_form}
+				<tfoot>
 					<tr>
-						<td class="maintitle" colspan="2"><a href="{$linker->getLink(array('section' => 'email', 'page' => 'emails'))}">{$lng['emails']['back_to_overview']}</a></td>
+						<td colspan="2"><a href="{$linker->getLink(array('section' => 'email', 'page' => 'emails'))}">{$lng['emails']['back_to_overview']}</a></td>
 					</tr>
-				</table>
-			</fieldset>
+				</tfoot>
+			</table>
 		</form>
 
 	</section>

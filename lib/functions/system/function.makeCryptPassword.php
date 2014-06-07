@@ -10,6 +10,8 @@
  *
  * @copyright  (c) the authors
  * @author     Michal Wojcik <m.wojcik@sonet3.pl>
+ * @author     Michael Kaufmann <mkaufmann@nutime.de>
+ * @author     Froxlor team <team@froxlor.org> (2010-)
  * @license    GPLv2 http://files.froxlor.org/misc/COPYING.txt
  * @package    Functions
  *
@@ -21,19 +23,18 @@
  * @return string encrypted password
  *
  * @author Michal Wojcik <m.wojcik@sonet3.pl>
+ * @author Michael Kaufmann <mkaufmann@nutime.de>
+ * @author Froxlor team <team@froxlor.org> (2010-)
  *
  * 0 - default crypt (depenend on system configuration)
  * 1 - MD5 $1$
- * 2 - BLOWFISH $2a$
+ * 2 - BLOWFISH $2a$ | $2y$07$ (on php 5.3.7+)
  * 3 - SHA-256 $5$
  * 4 - SHA-512 $6$
  */
-
 function makeCryptPassword ($password) {
 
-	global $settings;
-
-	$type = isset($settings['system']['passwordcryptfunc']) ? (int)$settings['system']['passwordcryptfunc'] : 1;
+	$type = Settings::Get('system.passwordcryptfunc') !== null ? (int)Settings::Get('system.passwordcryptfunc') : 1;
 
 	switch ($type) {
 		case 0:
@@ -43,7 +44,16 @@ function makeCryptPassword ($password) {
 			$cryptPassword = crypt($password, '$1$' . generatePassword().  generatePassword());
 			break;
 		case 2:
-			$cryptPassword = crypt($password, '$2a$' . generatePassword().  generatePassword());
+			if (version_compare(phpversion(), '5.3.7', '<')) {
+				$cryptPassword = crypt($password, '$2a$' . generatePassword().  generatePassword());
+			} else {
+				// Blowfish hashing with a salt as follows: "$2a$", "$2x$" or "$2y$",
+				// a two digit cost parameter, "$", and 22 characters from the alphabet "./0-9A-Za-z"
+				$cryptPassword = crypt(
+					$password,
+					'$2y$07$' . substr(generatePassword().generatePassword().generatePassword(), 0, 22)
+				);
+			}
 			break;
 		case 3:
 			$cryptPassword = crypt($password, '$5$' . generatePassword().  generatePassword());

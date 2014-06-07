@@ -15,24 +15,21 @@
  *
  */
 
-/*
+/**
  * Function checkLastGuid
  *
- * Checks if the system's last guid
- * is not higher than the one saved
- * in froxlor's database.
- * If it's higher, froxlor needs to
- * set its last guid to this one
- * to avoid conflicts with libnss-users
+ * Checks if the system's last guid is not higher than the one saved
+ * in froxlor's database. If it's higher, froxlor needs to
+ * set its last guid to this one to avoid conflicts with libnss-users
  *
- * @param	int		guid (from froxlor database)
+ * @param int guid (from froxlor database)
  *
- * @return	null
+ * @return null
  */
 function checkLastGuid() {
 
-	global $log, $cronlog, $db, $settings, $theme;
-	
+	global $log, $cronlog;
+
 	$mylog = null;
 	if (isset($cronlog) && $cronlog instanceof FroxlorLogger) {
 		$mylog = $cronlog;
@@ -45,8 +42,14 @@ function checkLastGuid() {
 	$update_to_guid = 0;
 	
 	$froxlor_guid = 0;
-	$result = $db->query_first("SELECT MAX(`guid`) as `fguid` FROM `".TABLE_PANEL_CUSTOMERS."`");
+	$result_stmt = Database::query("SELECT MAX(`guid`) as `fguid` FROM `".TABLE_PANEL_CUSTOMERS."`");
+	$result = $result_stmt->fetch(PDO::FETCH_ASSOC);
 	$froxlor_guid = $result['fguid'];
+
+	// possibly no customers yet or f*cked up lastguid settings
+	if ($froxlor_guid < Settings::Get('system.lastguid')) {
+		$froxlor_guid = Settings::Get('system.lastguid');
+	}
 
 	$g_file = '/etc/group';
 
@@ -88,10 +91,9 @@ function checkLastGuid() {
 				}
 
 				// now check if it differs from our settings
-				if ($update_to_guid != $settings['system']['lastguid']) {
+				if ($update_to_guid != Settings::Get('system.lastguid')) {
 					$mylog->logAction(CRON_ACTION, LOG_NOTICE, 'Updating froxlor last guid to '.$update_to_guid);
-					saveSetting('system', 'lastguid', $update_to_guid);
-					$settings['system']['lastguid'] = $update_to_guid;
+					Settings::Set('system.lastguid', $update_to_guid);
 				}
 			} else {
 				$mylog->logAction(CRON_ACTION, LOG_NOTICE, 'File /etc/group not readable; cannot check for latest guid');

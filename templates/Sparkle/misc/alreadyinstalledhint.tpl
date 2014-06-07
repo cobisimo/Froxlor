@@ -5,7 +5,7 @@
 	<meta http-equiv="Default-Style" content="text/css" />
 	<link rel="stylesheet" href="../templates/Sparkle/assets/css/main.css" />
 	<!--[if IE]><link rel="stylesheet" href="../templates/Sparkle/assets/css/main_ie.css" /><![endif]-->
-	<!--[if lt IE 9]><script src="js/html5shiv.js"></script><![endif]-->
+	<!--[if lt IE 9]><script src="js/html5shiv.min.js"></script><![endif]-->
 	<script type="text/javascript" src="js/jquery.min.js"></script>
 	<script type="text/javascript" src="../templates/Sparkle/assets/js/main.js"></script>
 	<link href="../templates/Sparkle/assets/img/favicon.ico" rel="icon" type="image/x-icon" />
@@ -28,18 +28,19 @@
 			<h2>Welcome to Froxlor</h2>
 			<p>It seems that Froxlor has already been configured.</p>
 			<p>Click on the link below to go to the login page.</p>
-			<p class="submit">
+			<p>&nbsp;</p>
+			<aside class="right">
 				<a href="../index.php" title="Click to go to the login page">Go to login</a>
-			</p>
+			</aside>
 		</section>
 
 	</article>
+
 </div>
 <footer>
 	<span>
-		Froxlor &copy; 2009-2010 by <a href="http://www.froxlor.org/" rel="external">the Froxlor Team</a>
+		Froxlor &copy; 2009-2013 by <a href="http://www.froxlor.org/" rel="external">the Froxlor Team</a>
 	</span>
 </footer>
 </body>
 </html>
-

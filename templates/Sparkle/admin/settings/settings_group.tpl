@@ -1,9 +1,8 @@
-<tr>
+<tr class="section">
 	<th>
 		{$groupdetails['title']}
 	</th>
-	<th style="width:350px;">
+	<th class="right">
 		<input type="reset" value="{$lng['panel']['reset']}" /><input type="submit" value="{$lng['panel']['save']}" />
 	</th>
 </tr>
-

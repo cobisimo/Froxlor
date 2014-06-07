@@ -6,38 +6,43 @@ $header
 			{$lng['menue']['traffic']['traffic']}
 		</h2>
 	</header>
+
+	<form action="{$linker->getLink(array('section' => 'traffic'))}" method="post" enctype="application/x-www-form-urlencoded">
+		<fieldset>
+			<table class="full hl" id="datatable">
+				<thead>
+					<tr>
+						<th>{$lng['traffic']['month']}</td>
+						<th>{$lng['traffic']['ftp']}</th>
+						<th>{$lng['traffic']['http']}</th>
+						<th>{$lng['traffic']['mail']}</th>
+						<th>{$lng['customer']['traffic']}</th>
+					</tr>
+				</thead>
+				<tbody>
+					$traffic
+				</tbody>
+				<tfoot>
+					<tr>
+						<td>{$lng['traffic']['months']['total']}</td>
+						<td>{$traffic_complete['ftp']}</td>
+						<td>{$traffic_complete['http']}</td>
+						<td>{$traffic_complete['mail']}</td>
+						<td></td>
+					</tr>
+				</tfoot>
+			</table>
+
+		</fieldset>
+	</form>
 	
-	<section>
-
-			<form action="{$linker->getLink(array('section' => 'traffic'))}" method="post" enctype="application/x-www-form-urlencoded">
-				<fieldset>
-					<table class="fullform bradius">
-						<tr>
-							<th>{$lng['traffic']['sumftp']} GB</th>
-							<th>{$lng['traffic']['sumhttp']} GB</th>
-							<th>{$lng['traffic']['summail']} GB</th>
-						</tr>
-						<tr>
-							<td><div style="color:#019522;">{$traffic_complete['ftp']}</div></td>
-							<td><div style="color:#0000FF;">{$traffic_complete['http']}</div></td>
-							<td><div style="color:#800000;">{$traffic_complete['mail']}</div></td>
-						</tr>
-					</table><br />
-					<table class="fullform bradius" id="datatable">
-						<tr id="datalegend">
-							<th>{$lng['traffic']['month']}</td>
-							<th>{$lng['traffic']['ftp']}</th>
-							<th>{$lng['traffic']['http']}</th>
-							<th>{$lng['traffic']['mail']}</th>
-							<th class="text-align:right;">{$lng['customer']['traffic']}</th>
-							<th></th>
-						</tr>
-						$traffic
-					</table>
-
-				</fieldset>
-			</form>
-	</section>
-	<div id="chartdiv" style="height:300px;width:100%"></div>
+	<div id="charts" class="hidden">
+		<h3>HTTP {$lng['admin']['traffic']} ({$lng['traffic']['months']['total']} {$traffic_complete['http']})</h3>
+		<div id="httpchart" class="trafficchart"></div>
+		<h3>FTP {$lng['admin']['traffic']} ({$lng['traffic']['months']['total']} {$traffic_complete['ftp']})</h3>
+		<div id="ftpchart" class="trafficchart"></div>
+		<h3>Mail {$lng['admin']['traffic']} ({$lng['traffic']['months']['total']} {$traffic_complete['mail']})</h3>
+		<div id="mailchart" class="trafficchart"></div>
+	</div>
 </article>
 $footer

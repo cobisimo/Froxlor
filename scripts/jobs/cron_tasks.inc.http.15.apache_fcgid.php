@@ -1,4 +1,4 @@
-<?php
+<?php if (!defined('MASTER_CRONJOB')) die('You cannot access this file directly!');
 
 /**
  * This file is part of the Froxlor project.
@@ -17,13 +17,6 @@
  *
  */
 
-if(@php_sapi_name() != 'cli'
-   && @php_sapi_name() != 'cgi'
-   && @php_sapi_name() != 'cgi-fcgi')
-{
-	die('This script only works in the shell.');
-}
-
 class apache_fcgid extends apache
 {
 	protected function composePhpOptions($domain, $ssl_vhost = false)
@@ -32,16 +25,21 @@ class apache_fcgid extends apache
 
 		if($domain['phpenabled'] == '1')
 		{
-			$php = new phpinterface($this->getDB(), $this->settings, $domain);
+			$php = new phpinterface($domain);
 			$phpconfig = $php->getPhpConfig((int)$domain['phpsettingid']);
 
-			if((int)$this->settings['phpfpm']['enabled'] == 1)
+			if((int)Settings::Get('phpfpm.enabled') == 1)
 			{
 				$srvName = 'fpm.external';
 				if ($domain['ssl'] == 1 && $ssl_vhost) {
 					$srvName = 'ssl-fpm.external';
 				}
-				$php_options_text.= '  FastCgiExternalServer ' . $php->getInterface()->getAliasConfigDir() . $srvName . ' -socket ' . $php->getInterface()->getSocketFile()  . ' -idle-timeout ' . $this->settings['phpfpm']['idle_timeout'] . "\n";
+				// #1317 - perl is executed via apache and therefore, when using fpm, does not know the user
+				// which perl is supposed to run as, hence the need for Suexec need
+				if (customerHasPerlEnabled($domain['customerid'])) {
+					$php_options_text.= '  SuexecUserGroup "' . $domain['loginname'] . '" "' . $domain['loginname'] . '"' . "\n";
+				}
+				$php_options_text.= '  FastCgiExternalServer ' . $php->getInterface()->getAliasConfigDir() . $srvName . ' -socket ' . $php->getInterface()->getSocketFile()  . ' -idle-timeout ' . Settings::Get('phpfpm.idle_timeout') . "\n";
 				$php_options_text.= '  <Directory "' . makeCorrectDir($domain['documentroot']) . '">' . "\n";
 				$php_options_text.= '    <FilesMatch "\.php$">' . "\n";
 				$php_options_text.= '      SetHandler php5-fastcgi'. "\n";
@@ -49,7 +47,7 @@ class apache_fcgid extends apache
 				$php_options_text.= '      Options +ExecCGI' . "\n";
 				$php_options_text.= '    </FilesMatch>' . "\n";
 				// >=apache-2.4 enabled?
-				if ($this->settings['system']['apache24'] == '1') {
+				if (Settings::Get('system.apache24') == '1') {
 					$php_options_text.= '    Require all granted' . "\n";
 				} else {
 					$php_options_text.= '    Order allow,deny' . "\n";
@@ -60,8 +58,8 @@ class apache_fcgid extends apache
 			}
 			else
 			{
-				$php_options_text.= '  FcgidIdleTimeout ' . $this->settings['system']['mod_fcgid_idle_timeout'] . "\n";
-				if((int)$this->settings['system']['mod_fcgid_wrapper'] == 0)
+				$php_options_text.= '  FcgidIdleTimeout ' . Settings::Get('system.mod_fcgid_idle_timeout') . "\n";
+				if((int)Settings::Get('system.mod_fcgid_wrapper') == 0)
 				{
 					$php_options_text.= '  SuexecUserGroup "' . $domain['loginname'] . '" "' . $domain['loginname'] . '"' . "\n";
 					$php_options_text.= '  ScriptAlias /php/ ' . $php->getInterface()->getConfigDir() . "\n";
@@ -80,7 +78,7 @@ class apache_fcgid extends apache
 					$php_options_text.= '      Options +ExecCGI' . "\n";
 					$php_options_text.= '    </FilesMatch>' . "\n";
 					// >=apache-2.4 enabled?
-					if ($this->settings['system']['apache24'] == '1') {
+					if (Settings::Get('system.apache24') == '1') {
 						$php_options_text.= '    Require all granted' . "\n";
 					} else {
 						$php_options_text.= '    Order allow,deny' . "\n";
@@ -93,8 +91,8 @@ class apache_fcgid extends apache
 			// create starter-file | config-file
 			$php->getInterface()->createConfig($phpconfig);
 
-			// create php.ini
-			// @TODO make php-fpm support this
+			// create php.ini (fpm does nothing here, as it
+			// defines ini-settings in its pool config)
 			$php->getInterface()->createIniFile($phpconfig);
 		}
 		else
@@ -107,33 +105,33 @@ class apache_fcgid extends apache
 
 	public function createOwnVhostStarter()
 	{
-		if ($this->settings['system']['mod_fcgid_ownvhost'] == '1'
-			|| ($this->settings['phpfpm']['enabled'] == '1'
-				&& $this->settings['phpfpm']['enabled_ownvhost'] == '1')
+		if (Settings::Get('system.mod_fcgid_ownvhost') == '1'
+			|| (Settings::Get('phpfpm.enabled') == '1'
+				&& Settings::Get('phpfpm.enabled_ownvhost') == '1')
 		) {
 			$mypath = makeCorrectDir(dirname(dirname(dirname(__FILE__)))); // /var/www/froxlor, needed for chown
 
-			if ($this->settings['system']['mod_fcgid_ownvhost'] == '1')
+			if (Settings::Get('system.mod_fcgid_ownvhost') == '1')
 			{
-				$user = $this->settings['system']['mod_fcgid_httpuser'];
-				$group = $this->settings['system']['mod_fcgid_httpgroup'];
+				$user = Settings::Get('system.mod_fcgid_httpuser');
+				$group = Settings::Get('system.mod_fcgid_httpgroup');
 			}
-			elseif($this->settings['phpfpm']['enabled'] == '1'
-				&& $this->settings['phpfpm']['enabled_ownvhost'] == '1'
+			elseif(Settings::Get('phpfpm.enabled') == '1'
+				&& Settings::Get('phpfpm.enabled_ownvhost') == '1'
 			) {
-				$user = $this->settings['phpfpm']['vhost_httpuser'];
-				$group = $this->settings['phpfpm']['vhost_httpgroup'];
+				$user = Settings::Get('phpfpm.vhost_httpuser');
+				$group = Settings::Get('phpfpm.vhost_httpgroup');
 			}
 
 			$domain = array(
 				'id' => 'none',
-				'domain' => $this->settings['system']['hostname'],
+				'domain' => Settings::Get('system.hostname'),
 				'adminid' => 1, /* first admin-user (superadmin) */
 				'mod_fcgid_starter' => -1,
 				'mod_fcgid_maxrequests' => -1,
 				'guid' => $user,
 				'openbasedir' => 0,
-				'email' => $this->settings['panel']['adminmail'],
+				'email' => Settings::Get('panel.adminmail'),
 				'loginname' => 'froxlor.panel',
 				'documentroot' => $mypath
 			);
@@ -143,22 +141,22 @@ class apache_fcgid extends apache
 			safe_exec('chown -R ' . $user . ':' . $group . ' ' . escapeshellarg($mypath));
 
 			// get php.ini for our own vhost
-			$php = new phpinterface($this->getDB(), $this->settings, $domain);
+			$php = new phpinterface($domain);
 
 			// get php-config
-			if ($this->settings['phpfpm']['enabled'] == '1') {
+			if (Settings::Get('phpfpm.enabled') == '1') {
 				// fpm
-				$phpconfig = $php->getPhpConfig($this->settings['phpfpm']['vhost_defaultini']);
+				$phpconfig = $php->getPhpConfig(Settings::Get('phpfpm.vhost_defaultini'));
 			} else {
 				// fcgid
-				$phpconfig = $php->getPhpConfig($this->settings['system']['mod_fcgid_defaultini_ownvhost']);
+				$phpconfig = $php->getPhpConfig(Settings::Get('system.mod_fcgid_defaultini_ownvhost'));
 			}
 
 			// create starter-file | config-file
 			$php->getInterface()->createConfig($phpconfig);
 
-			// create php.ini
-			// @TODO make php-fpm support this
+			// create php.ini (fpm does nothing here, as it
+			// defines ini-settings in its pool config)
 			$php->getInterface()->createIniFile($phpconfig);
 		}
 	}

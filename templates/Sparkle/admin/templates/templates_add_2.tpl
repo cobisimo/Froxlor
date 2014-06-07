@@ -7,24 +7,17 @@ $header
 			</h2>
 		</header>
 
-		<section class="fullform bradius">
+		<section>
 
 			<form action="{$linker->getLink(array('section' => 'templates'))}" method="post" enctype="application/x-www-form-urlencoded">
-				<fieldset>
-					<legend>Froxlor&nbsp;-&nbsp;{$title}</legend>
+				<input type="hidden" name="s" value="$s" />
+				<input type="hidden" name="page" value="$page" />
+				<input type="hidden" name="action" value="$action" />
+				<input type="hidden" name="send" value="send" />
 
-					<table class="formtable">
-						{$template_add_form}
-					</table>
-
-					<p style="display: none;">
-						<input type="hidden" name="s" value="$s" />
-						<input type="hidden" name="page" value="$page" />
-						<input type="hidden" name="action" value="$action" />
-						<input type="hidden" name="send" value="send" />
-					</p>
-
-				</fieldset>
+				<table class="full">
+					{$template_add_form}
+				</table>
 			</form>
 
 		</section>
@@ -39,7 +32,7 @@ $header
 		
 		<section>
 			
-			<table class="bradius">
+			<table class="full">
 			<thead>
 				<tr>
 					<th>{$lng['panel']['variable']}</th>
@@ -85,7 +78,7 @@ $header
 					<td><em>{EMAIL}</em></td>
 					<td>{$lng['admin']['templates']['EMAIL']}</td>
 				</tr>
-				<if $settings['panel']['sendalternativemail'] == 1>
+				<if Settings::Get('panel.sendalternativemail') == 1>
 				<tr>
 					<td colspan="2">
 						<strong>{$lng['admin']['templates']['pop_success_alternative']}</strong>
@@ -114,8 +107,8 @@ $header
 					<td>{$lng['admin']['templates']['USERNAME']}</td>
 				</tr>
 				<tr>
-					<td><em>{PASSWORD}</em></td>
-					<td>{$lng['admin']['templates']['PASSWORD']}</td>
+					<td><em>{LINK}</em></td>
+					<td>{$lng['admin']['templates']['LINK']}</td>
 				</tr>
 				<tr>
 					<td colspan="2">

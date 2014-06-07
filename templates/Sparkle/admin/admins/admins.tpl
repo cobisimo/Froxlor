@@ -10,58 +10,51 @@ $header
 		<section>
 
 			<form action="{$linker->getLink(array('section' => 'admins'))}" method="post" enctype="application/x-www-form-urlencoded">
-
-			<div class="overviewsearch">
-				{$searchcode}
-			</div>
-
-			<if 15 < $count >
-				<div class="overviewadd">
-					<img src="templates/{$theme}/assets/img/icons/user_add.png" alt="" />&nbsp;
-					<a href="{$linker->getLink(array('section' => 'admins', 'page' => $page, 'action' => 'add'))}">{$lng['admin']['admin_add']}</a>
-				</div>
-			</if>
-
-			<table class="bradius" id="sortable" sort-column="1">
-			<thead>
-				<tr>
-					<th>
-						{$lng['customer']['name']}
-					</th>
-					<th>
-						{$lng['login']['username']}
-					</th>
-					<th>{$lng['admin']['customers']}</th>
-					<th class="nosort">&nbsp;</th>
-					<th class="nosort">{$lng['panel']['options']}</th>
-				</tr>
-			</thead>
-			<if $pagingcode != ''>
-				<tfoot>
-					<tr>
-						<td colspan="5">{$pagingcode}</td>
-					</tr>
-				</tfoot>
-			</if>
-			<tbody>
-				$admins
-			</tbody>
-			</table>
-
-			<p style="display:none;">
 				<input type="hidden" name="s" value="$s" />
 				<input type="hidden" name="page" value="$page" />
-			</p>
+				
+				<div class="overviewsearch">
+					{$searchcode}
+				</div>
 
+				<div class="overviewadd">
+					<img src="templates/{$theme}/assets/img/icons/add.png" alt="" />
+					<a href="{$linker->getLink(array('section' => 'admins', 'page' => $page, 'action' => 'add'))}">{$lng['admin']['admin_add']}</a>
+				</div>
+
+				<table class="full hl">
+					<thead>
+						<tr>
+							<th>{$lng['customer']['name']}&nbsp;{$arrowcode['name']}</th>
+							<th>{$lng['login']['username']}&nbsp;{$arrowcode['loginname']}</th>
+							<th>{$lng['admin']['customers']}</th>
+							<th>&nbsp;</th>
+							<th>{$lng['panel']['options']}</th>
+						</tr>
+					</thead>
+			
+					<if $pagingcode != ''>
+					<tfoot>
+						<tr>
+							<td colspan="5">{$pagingcode}</td>
+						</tr>
+					</tfoot>
+					</if>
+					
+					<tbody>
+						$admins
+					</tbody>
+				</table>
 			</form>
 
+			<if 15 < $count >
 			<div class="overviewadd">
-				<img src="templates/{$theme}/assets/img/icons/user_add.png" alt="" />&nbsp;
+				<img src="templates/{$theme}/assets/img/icons/add.png" alt="" />
 				<a href="{$linker->getLink(array('section' => 'admins', 'page' => $page, 'action' => 'add'))}">{$lng['admin']['admin_add']}</a>
 			</div>
+			</if>
 
 		</section>
 
 	</article>
 $footer
-

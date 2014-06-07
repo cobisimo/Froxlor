@@ -1,4 +1,4 @@
-<?php
+<?php if (!defined('MASTER_CRONJOB')) die('You cannot access this file directly!');
 
 /**
  * This file is part of the Froxlor project.
@@ -17,27 +17,27 @@
  *
  */
 
-/*
- * necessary includes
- */
-require_once(makeCorrectFile(dirname(__FILE__) . '/cron_tasks.inc.dns.10.bind.php'));
-require_once(makeCorrectFile(dirname(__FILE__) . '/cron_tasks.inc.http.10.apache.php'));
-require_once(makeCorrectFile(dirname(__FILE__) . '/cron_tasks.inc.http.15.apache_fcgid.php'));
-require_once(makeCorrectFile(dirname(__FILE__) . '/cron_tasks.inc.http.20.lighttpd.php'));
-require_once(makeCorrectFile(dirname(__FILE__) . '/cron_tasks.inc.http.25.lighttpd_fcgid.php'));
-require_once(makeCorrectFile(dirname(__FILE__) . '/cron_tasks.inc.http.30.nginx.php'));
-require_once(makeCorrectFile(dirname(__FILE__) . '/cron_tasks.inc.http.35.nginx_phpfpm.php'));
+// necessary includes
+require_once makeCorrectFile(dirname(__FILE__) . '/cron_tasks.inc.dns.10.bind.php');
+require_once makeCorrectFile(dirname(__FILE__) . '/cron_tasks.inc.http.10.apache.php');
+require_once makeCorrectFile(dirname(__FILE__) . '/cron_tasks.inc.http.15.apache_fcgid.php');
+require_once makeCorrectFile(dirname(__FILE__) . '/cron_tasks.inc.http.20.lighttpd.php');
+require_once makeCorrectFile(dirname(__FILE__) . '/cron_tasks.inc.http.25.lighttpd_fcgid.php');
+require_once makeCorrectFile(dirname(__FILE__) . '/cron_tasks.inc.http.30.nginx.php');
+require_once makeCorrectFile(dirname(__FILE__) . '/cron_tasks.inc.http.35.nginx_phpfpm.php');
 
 /**
  * LOOK INTO TASKS TABLE TO SEE IF THERE ARE ANY UNDONE JOBS
  */
-
 fwrite($debugHandler, '  cron_tasks: Searching for tasks to do' . "\n");
 $cronlog->logAction(CRON_ACTION, LOG_INFO, "Searching for tasks to do");
-$result_tasks = $db->query("SELECT `id`, `type`, `data` FROM `" . TABLE_PANEL_TASKS . "` ORDER BY `id` ASC");
+$result_tasks_stmt = Database::query("
+	SELECT `id`, `type`, `data` FROM `" . TABLE_PANEL_TASKS . "` ORDER BY `id` ASC
+");
+$num_results = Database::num_rows();
 $resultIDs = array();
 
-while ($row = $db->fetch_array($result_tasks)) {
+while ($row = $result_tasks_stmt->fetch(PDO::FETCH_ASSOC)) {
 
 	$resultIDs[] = $row['id'];
 
@@ -48,33 +48,32 @@ while ($row = $db->fetch_array($result_tasks)) {
 	/**
 	 * TYPE=1 MEANS TO REBUILD APACHE VHOSTS.CONF
 	 */
-
 	if ($row['type'] == '1') {
 
 		// get configuration-I/O object
-		$configio = new ConfigIO($settings);
+		$configio = new ConfigIO();
 		// clean up old configs
 		$configio->cleanUp();
 
 		if (!isset($webserver)) {
-			if ($settings['system']['webserver'] == "apache2") {
+			if (Settings::Get('system.webserver') == "apache2") {
 				$websrv = 'apache';
-				if ($settings['system']['mod_fcgid'] == 1 || $settings['phpfpm']['enabled'] == 1) {
+				if (Settings::Get('system.mod_fcgid') == 1 || Settings::Get('phpfpm.enabled') == 1) {
 					$websrv .= '_fcgid';
 				}
-			} elseif ($settings['system']['webserver'] == "lighttpd") {
+			} elseif (Settings::Get('system.webserver') == "lighttpd") {
 				$websrv = 'lighttpd';
-				if ($settings['system']['mod_fcgid'] == 1 || $settings['phpfpm']['enabled'] == 1) {
+				if (Settings::Get('system.mod_fcgid') == 1 || Settings::Get('phpfpm.enabled') == 1) {
 					$websrv .= '_fcgid';
 				}
-			} elseif($settings['system']['webserver'] == "nginx") {
+			} elseif (Settings::Get('system.webserver') == "nginx") {
 				$websrv = 'nginx';
-				if ($settings['phpfpm']['enabled'] == 1) {
+				if (Settings::Get('phpfpm.enabled') == 1) {
 					$websrv .= '_phpfpm';
 				}
 			}
 
-			$webserver = new $websrv($db, $cronlog, $debugHandler, $idna_convert, $settings);
+			$webserver = new $websrv($cronlog, $debugHandler, $idna_convert);
 		}
 
 		if (isset($webserver)) {
@@ -92,25 +91,32 @@ while ($row = $db->fetch_array($result_tasks)) {
 	/**
 	 * TYPE=2 MEANS TO CREATE A NEW HOME AND CHOWN
 	 */
-	elseif ($row['type'] == '2')
-	{
+	elseif ($row['type'] == '2') {
 		fwrite($debugHandler, '  cron_tasks: Task2 started - create new home' . "\n");
 		$cronlog->logAction(CRON_ACTION, LOG_INFO, 'Task2 started - create new home');
 
-		if(is_array($row['data']))
-		{
+		if (is_array($row['data'])) {
 			// define paths
-			$userhomedir = makeCorrectDir($settings['system']['documentroot_prefix'] . '/' . $row['data']['loginname'] . '/');
-			$usermaildir = makeCorrectDir($settings['system']['vmail_homedir'] . '/' . $row['data']['loginname'] . '/');
+			$userhomedir = makeCorrectDir(Settings::Get('system.documentroot_prefix') . '/' . $row['data']['loginname'] . '/');
+			$usermaildir = makeCorrectDir(Settings::Get('system.vmail_homedir') . '/' . $row['data']['loginname'] . '/');
 
 			// stats directory
-			if($settings['system']['awstats_enabled'] == '1')
-			{
+			if (Settings::Get('system.awstats_enabled') == '1') {
 				$cronlog->logAction(CRON_ACTION, LOG_NOTICE, 'Running: mkdir -p ' . escapeshellarg($userhomedir . 'awstats'));
 				safe_exec('mkdir -p ' . escapeshellarg($userhomedir . 'awstats'));
+				// in case we changed from the other stats -> remove old
+				// (yes i know, the stats are lost - that's why you should not change all the time!)
+				if (file_exists($userhomedir . 'webalizer')) {
+					safe_exec('rm -rf ' . escapeshellarg($userhomedir . 'webalizer'));
+				}
 			} else {
 				$cronlog->logAction(CRON_ACTION, LOG_NOTICE, 'Running: mkdir -p ' . escapeshellarg($userhomedir . 'webalizer'));
 				safe_exec('mkdir -p ' . escapeshellarg($userhomedir . 'webalizer'));
+				// in case we changed from the other stats -> remove old
+				// (yes i know, the stats are lost - that's why you should not change all the time!)
+				if (file_exists($userhomedir . 'awstats')) {
+					safe_exec('rm -rf ' . escapeshellarg($userhomedir . 'awstats'));
+				}
 			}
 
 			// maildir
@@ -118,8 +124,7 @@ while ($row = $db->fetch_array($result_tasks)) {
 			safe_exec('mkdir -p ' . escapeshellarg($usermaildir));
 
 			//check if admin of customer has added template for new customer directories
-			if((int)$row['data']['store_defaultindex'] == 1)
-			{
+			if ((int)$row['data']['store_defaultindex'] == 1) {
 				storeDefaultIndex($row['data']['loginname'], $userhomedir, $cronlog, true);
 			}
 
@@ -129,30 +134,22 @@ while ($row = $db->fetch_array($result_tasks)) {
 
 			$cronlog->logAction(CRON_ACTION, LOG_NOTICE, 'Running: chown -R ' . (int)$row['data']['uid'] . ':' . (int)$row['data']['gid'] . ' ' . escapeshellarg($userhomedir));
 			safe_exec('chown -R ' . (int)$row['data']['uid'] . ':' . (int)$row['data']['gid'] . ' ' . escapeshellarg($userhomedir));
-			$cronlog->logAction(CRON_ACTION, LOG_NOTICE, 'Running: chown -R ' . (int)$settings['system']['vmail_uid'] . ':' . (int)$settings['system']['vmail_gid'] . ' ' . escapeshellarg($usermaildir));
-			safe_exec('chown -R ' . (int)$settings['system']['vmail_uid'] . ':' . (int)$settings['system']['vmail_gid'] . ' ' . escapeshellarg($usermaildir));
+			// don't allow others to access the directory (webserver will be the group)
+			safe_exec('chmod 0750 ' . escapeshellarg($userhomedir));
+			$cronlog->logAction(CRON_ACTION, LOG_NOTICE, 'Running: chown -R ' . (int)Settings::Get('system.vmail_uid') . ':' . (int)Settings::Get('system.vmail_gid') . ' ' . escapeshellarg($usermaildir));
+			safe_exec('chown -R ' . (int)Settings::Get('system.vmail_uid') . ':' . (int)Settings::Get('system.vmail_gid') . ' ' . escapeshellarg($usermaildir));
 		}
-	}
-
-	/**
-	 * TYPE=3 MEANS TO DO NOTHING
-	 */
-	elseif ($row['type'] == '3')
-	{
 	}
 
 	/**
 	 * TYPE=4 MEANS THAT SOMETHING IN THE BIND CONFIG HAS CHANGED. REBUILD froxlor_bind.conf IF BIND IS ENABLED
 	 */
-	elseif ($row['type'] == '4' && (int)$settings['system']['bind_enable'] != 0)
-	{
-		if(!isset($nameserver))
-		{
-			$nameserver = new bind($db, $cronlog, $debugHandler, $settings);
+	elseif ($row['type'] == '4' && (int)Settings::Get('system.bind_enable') != 0) {
+		if (!isset($nameserver)) {
+			$nameserver = new bind($cronlog, $debugHandler);
 		}
 
-		if($settings['dkim']['use_dkim'] == '1')
-		{
+		if (Settings::Get('dkim.use_dkim') == '1') {
 			$nameserver->writeDKIMconfigs();
 		}
 
@@ -162,13 +159,14 @@ while ($row = $db->fetch_array($result_tasks)) {
 	/**
 	 * TYPE=5 MEANS THAT A NEW FTP-ACCOUNT HAS BEEN CREATED, CREATE THE DIRECTORY
 	 */
-	elseif ($row['type'] == '5')
-	{
+	elseif ($row['type'] == '5') {
 		$cronlog->logAction(CRON_ACTION, LOG_INFO, 'Creating new FTP-home');
-		$result_directories = $db->query('SELECT `f`.`homedir`, `f`.`uid`, `f`.`gid`, `c`.`documentroot` AS `customerroot` FROM `' . TABLE_FTP_USERS . '` `f` LEFT JOIN `' . TABLE_PANEL_CUSTOMERS . '` `c` USING (`customerid`) WHERE `f`.`username` NOT LIKE \'%_backup\'');
+		$result_directories_stmt = Database::query("
+			SELECT `f`.`homedir`, `f`.`uid`, `f`.`gid`, `c`.`documentroot` AS `customerroot`
+			FROM `" . TABLE_FTP_USERS . "` `f` LEFT JOIN `" . TABLE_PANEL_CUSTOMERS . "` `c` USING (`customerid`)
+		");
 
-		while($directory = $db->fetch_array($result_directories))
-		{
+		while ($directory = $result_directories_stmt->fetch(PDO::FETCH_ASSOC)) {
 			mkDirWithCorrectOwnership($directory['customerroot'], $directory['homedir'], $directory['uid'], $directory['gid']);
 		}
 	}
@@ -176,100 +174,63 @@ while ($row = $db->fetch_array($result_tasks)) {
 	/**
 	 * TYPE=6 MEANS THAT A CUSTOMER HAS BEEN DELETED AND THAT WE HAVE TO REMOVE ITS FILES
 	 */
-	elseif ($row['type'] == '6')
-	{
+	elseif ($row['type'] == '6') {
 		fwrite($debugHandler, '  cron_tasks: Task6 started - deleting customer data' . "\n");
 		$cronlog->logAction(CRON_ACTION, LOG_INFO, 'Task6 started - deleting customer data');
 
-		if(is_array($row['data']))
-		{
-			if(isset($row['data']['loginname']))
-			{
-				/*
-				 * remove homedir
-				 */
-				$homedir = makeCorrectDir($settings['system']['documentroot_prefix'] . '/' . $row['data']['loginname']);
+		if (is_array($row['data'])) {
+			if (isset($row['data']['loginname'])) {
+				// remove homedir
+				$homedir = makeCorrectDir(Settings::Get('system.documentroot_prefix') . '/' . $row['data']['loginname']);
 
-				if($homedir != '/'
-				&& $homedir != $settings['system']['documentroot_prefix']
-				&& substr($homedir, 0, strlen($settings['system']['documentroot_prefix'])) == $settings['system']['documentroot_prefix'])
-				{
+				if (file_exists($homedir)
+					&& $homedir != '/'
+					&& $homedir != Settings::Get('system.documentroot_prefix')
+					&& substr($homedir, 0, strlen(Settings::Get('system.documentroot_prefix'))) == Settings::Get('system.documentroot_prefix')
+				) {
 					$cronlog->logAction(CRON_ACTION, LOG_NOTICE, 'Running: rm -rf ' . escapeshellarg($homedir));
 					safe_exec('rm -rf '.escapeshellarg($homedir));
 				}
-				
-				/*
-				 * remove backup dir
-				 */
-				$backupdir = makeCorrectDir($settings['system']['backup_dir'] . $row['data']['loginname']);
 
-				if($backupdir != '/'
-				&& $backupdir != $settings['system']['backup_dir']
-				&& substr($backupdir, 0, strlen($settings['system']['backup_dir'])) == $settings['system']['backup_dir'])
-				{
-					$cronlog->logAction(CRON_ACTION, LOG_NOTICE, 'Running: rm -rf ' . escapeshellarg($backupdir));
-					safe_exec('rm -rf '.escapeshellarg($backupdir));
-				}
-				
-				/*
-				 * remove maildir
-				 */
-				$maildir = makeCorrectDir($settings['system']['vmail_homedir'] . '/' . $row['data']['loginname']);
+				// remove maildir
+				$maildir = makeCorrectDir(Settings::Get('system.vmail_homedir') . '/' . $row['data']['loginname']);
 
-				if($maildir != '/'
-				&& $maildir != $settings['system']['vmail_homedir']
-				&& substr($maildir, 0, strlen($settings['system']['vmail_homedir'])) == $settings['system']['vmail_homedir']
-				&& is_dir($maildir)
-				&& fileowner($maildir) == $settings['system']['vmail_uid']
-				&& filegroup($maildir) == $settings['system']['vmail_gid'])
-				{
+				if (file_exists($maildir)
+					&& $maildir != '/'
+					&& $maildir != Settings::Get('system.vmail_homedir')
+					&& substr($maildir, 0, strlen(Settings::Get('system.vmail_homedir'))) == Settings::Get('system.vmail_homedir')
+					&& is_dir($maildir)
+					&& fileowner($maildir) == Settings::Get('system.vmail_uid')
+					&& filegroup($maildir) == Settings::Get('system.vmail_gid')
+				) {
 					$cronlog->logAction(CRON_ACTION, LOG_NOTICE, 'Running: rm -rf ' . escapeshellarg($maildir));
 					safe_exec('rm -rf '.escapeshellarg($maildir));
 				}
 
-				/*
-				 * remove tmpdir if it exists
-				 */
-				$tmpdir = makeCorrectDir($settings['system']['mod_fcgid_tmpdir'] . '/' . $row['data']['loginname'] . '/');
+				// remove tmpdir if it exists
+				$tmpdir = makeCorrectDir(Settings::Get('system.mod_fcgid_tmpdir') . '/' . $row['data']['loginname'] . '/');
 
-				if (is_dir($tmpdir)
-				&& $tmpdir != "/"
-				&& $tmpdir != $settings['system']['mod_fcgid_tmpdir']
-				&& substr($tmpdir, 0, strlen($settings['system']['mod_fcgid_tmpdir'])) == $settings['system']['mod_fcgid_tmpdir'])
-				{
-					 $cronlog->logAction(CRON_ACTION, LOG_NOTICE, 'Running: rm -rf ' . escapeshellarg($tmpdir));
-					 safe_exec('rm -rf '.escapeshellarg($tmpdir));
+				if (file_exists($tmpdir)
+					&& is_dir($tmpdir)
+					&& $tmpdir != "/"
+					&& $tmpdir != Settings::Get('system.mod_fcgid_tmpdir')
+					&& substr($tmpdir, 0, strlen(Settings::Get('system.mod_fcgid_tmpdir'))) == Settings::Get('system.mod_fcgid_tmpdir')
+				) {
+					$cronlog->logAction(CRON_ACTION, LOG_NOTICE, 'Running: rm -rf ' . escapeshellarg($tmpdir));
+					safe_exec('rm -rf '.escapeshellarg($tmpdir));
 				}
 
-				/*
-				 * see if we have some php-fcgid leftovers if used
-				 * and remove them, #200
-				 */
-				if($settings['system']['mod_fcgid'] == 1)
-				{
-					// e.g. /var/www/php-fcgi-starter/web1/
-					$configdir = makeCorrectDir($settings['system']['mod_fcgid_configdir'] . '/' . $row['data']['loginname'] . '/');
+				// webserver logs
+				$logsdir = makeCorrectFile(Settings::Get('system.logfiles_directory').'/'.$row['data']['loginname']);
 
-					if (is_dir($configdir))
-					{
-						$its = new RecursiveIteratorIterator(
-							new RecursiveDirectoryIterator($configdir)
-						);
-
-						// iterate through all subdirs,
-						// look for php-fcgi-starter files
-						// and take immutable-flag away from them
-						// so we can delete them :)
-						foreach ($its as $fullFileName => $it )
-						{
-							if ($it->isFile() && $it->getFilename() == 'php-fcgi-starter')
-							{
-								removeImmutable($its->getPathname());
-							}
-						}
-						// now get rid of old stuff
-						safe_exec('rm -rf '. escapeshellarg($configdir));
-					}
+				if (file_exists($logsdir)
+					&& $logsdir != '/'
+					&& $logsdir != makeCorrectDir(Settings::Get('system.logfiles_directory'))
+					&& substr($logsdir, 0, strlen(Settings::Get('system.logfiles_directory'))) == Settings::Get('system.logfiles_directory')
+				) {
+					// build up wildcard for webX-{access,error}.log{*}
+					$logfiles .= '-*';
+					safe_exec('rm -f '.escapeshellarg($logfiles));
 				}
 			}
 		}
@@ -278,53 +239,56 @@ while ($row = $db->fetch_array($result_tasks)) {
 	/**
 	 * TYPE=7 Customer deleted an email account and wants the data to be deleted on the filesystem
 	 */
-	elseif ($row['type'] == '7')
-	{
+	elseif ($row['type'] == '7') {
 		fwrite($debugHandler, '  cron_tasks: Task7 started - deleting customer e-mail data' . "\n");
 		$cronlog->logAction(CRON_ACTION, LOG_INFO, 'Task7 started - deleting customer e-mail data');
 
-		if(is_array($row['data']))
-		{
-			if(isset($row['data']['loginname'])
+		if (is_array($row['data'])) {
+
+			if (isset($row['data']['loginname'])
 				&& isset($row['data']['email'])
 			) {
-				/*
-				 * remove specific maildir
-				 */
+				// remove specific maildir
 				$email_full = $row['data']['email'];
 				if (empty($email_full)) {
 					$cronlog->logAction(CRON_ACTION, LOG_ERROR, 'FATAL: Task7 asks to delete a email account but email field is empty!');
 				}
-				$email_user=substr($email_full,0,strrpos($email_full,"@"));
-				$email_domain=substr($email_full,strrpos($email_full,"@")+1);
-				$maildirname=trim($settings['system']['vmail_maildirname']);
+				$email_user = substr($email_full,0,strrpos($email_full,"@"));
+				$email_domain = substr($email_full,strrpos($email_full,"@")+1);
+				$maildirname = trim(Settings::Get('system.vmail_maildirname'));
 				// Add trailing slash to Maildir if needed
-				$maildirpath=$maildirname;
-				if (!empty($maildirname) and substr($maildirname,-1) != "/") $maildirpath.="/";
-				$maildir = makeCorrectDir($settings['system']['vmail_homedir'] .'/'. $row['data']['loginname'] .'/'. $email_domain .'/'. $email_user);
+				$maildirpath = $maildirname;
+				if (!empty($maildirname) and substr($maildirname,-1) != "/") {
+					$maildirpath .= "/";
+				}
 
-				if($maildir != '/' && !empty($maildir) && !empty($email_full)
-				&& $maildir != $settings['system']['vmail_homedir']
-				&& substr($maildir, 0, strlen($settings['system']['vmail_homedir'])) == $settings['system']['vmail_homedir']
-				&& is_dir($maildir) 
-				&& is_dir(makeCorrectDir($maildir.'/'.$maildirpath))
-				&& fileowner($maildir) == $settings['system']['vmail_uid']
-				&& filegroup($maildir) == $settings['system']['vmail_gid'])
-				{
+				$maildir = makeCorrectDir(Settings::Get('system.vmail_homedir') .'/'. $row['data']['loginname'] .'/'. $email_domain .'/'. $email_user);
+
+				if ($maildir != '/'
+					&& !empty($maildir)
+					&& !empty($email_full)
+					&& $maildir != Settings::Get('system.vmail_homedir')
+					&& substr($maildir, 0, strlen(Settings::Get('system.vmail_homedir'))) == Settings::Get('system.vmail_homedir')
+					&& is_dir($maildir)
+					&& is_dir(makeCorrectDir($maildir.'/'.$maildirpath))
+					&& fileowner($maildir) == Settings::Get('system.vmail_uid')
+					&& filegroup($maildir) == Settings::Get('system.vmail_gid')
+				) {
 					$cronlog->logAction(CRON_ACTION, LOG_NOTICE, 'Running: rm -rf ' . escapeshellarg($maildir));
 					safe_exec('rm -rf '.escapeshellarg($maildir));
-				}
-				else {
-					// backward-compatibility for old folder-structure
-					$maildir_old = makeCorrectDir($settings['system']['vmail_homedir'] .'/'. $row['data']['loginname'] .'/'. $row['data']['email']);
 
-					if ($maildir_old != '/' && !empty($maildir_old)
-						&& $maildir_old != $settings['system']['vmail_homedir']
-						&& substr($maildir_old, 0, strlen($settings['system']['vmail_homedir'])) == $settings['system']['vmail_homedir']
+				} else {
+					// backward-compatibility for old folder-structure
+					$maildir_old = makeCorrectDir(Settings::Get('system.vmail_homedir') .'/'. $row['data']['loginname'] .'/'. $row['data']['email']);
+
+					if ($maildir_old != '/'
+						&& !empty($maildir_old)
+						&& $maildir_old != Settings::Get('system.vmail_homedir')
+						&& substr($maildir_old, 0, strlen(Settings::Get('system.vmail_homedir'))) == Settings::Get('system.vmail_homedir')
 						&& is_dir($maildir_old)
-						&& fileowner($maildir_old) == $settings['system']['vmail_uid']
-						&& filegroup($maildir_old) == $settings['system']['vmail_gid'])
-					{
+						&& fileowner($maildir_old) == Settings::Get('system.vmail_uid')
+						&& filegroup($maildir_old) == Settings::Get('system.vmail_gid')
+					) {
 						$cronlog->logAction(CRON_ACTION, LOG_NOTICE, 'Running: rm -rf ' . escapeshellarg($maildir_old));
 						safe_exec('rm -rf '.escapeshellarg($maildir_old));
 					}
@@ -337,25 +301,23 @@ while ($row = $db->fetch_array($result_tasks)) {
 	 * TYPE=8 Customer deleted a ftp account and wants the homedir to be deleted on the filesystem
 	 * refs #293
 	 */
-	elseif ($row['type'] == '8')
-	{
+	elseif ($row['type'] == '8') {
 		fwrite($debugHandler, '  cron_tasks: Task8 started - deleting customer ftp homedir' . "\n");
 		$cronlog->logAction(CRON_ACTION, LOG_INFO, 'Task8 started - deleting customer ftp homedir');
 
-		if(is_array($row['data']))
-		{
-			if(isset($row['data']['loginname'])
+		if (is_array($row['data'])) {
+
+			if (isset($row['data']['loginname'])
 				&& isset($row['data']['homedir'])
 			) {
-				/*
-				 * remove specific homedir
-				 */
+				// remove specific homedir
 				$ftphomedir = makeCorrectDir($row['data']['homedir']);
-				$customerdocroot = makeCorrectDir($settings['system']['documentroot_prefix'].'/'.$row['data']['loginname'].'/');
+				$customerdocroot = makeCorrectDir(Settings::Get('system.documentroot_prefix').'/'.$row['data']['loginname'].'/');
 
-				if($ftphomedir != '/'
-				&& $ftphomedir != $settings['system']['documentroot_prefix']
-				&& $ftphomedir != $customerdocroot
+				if (file_exists($ftphomedir)
+					&& $ftphomedir != '/'
+					&& $ftphomedir != Settings::Get('system.documentroot_prefix')
+					&& $ftphomedir != $customerdocroot
 				) {
 					$cronlog->logAction(CRON_ACTION, LOG_NOTICE, 'Running: rm -rf ' . escapeshellarg($ftphomedir));
 					safe_exec('rm -rf '.escapeshellarg($ftphomedir));
@@ -367,7 +329,7 @@ while ($row = $db->fetch_array($result_tasks)) {
 	/**
 	 * TYPE=10 Set the filesystem - quota
 	 */
-	elseif ($row['type'] == '10' && (int)$settings['system']['diskquota_enabled'] != 0) {
+	elseif ($row['type'] == '10' && (int)Settings::Get('system.diskquota_enabled') != 0) {
 
 		fwrite($debugHandler, '  cron_tasks: Task10 started - setting filesystem quota' . "\n");
 		$cronlog->logAction(CRON_ACTION, LOG_INFO, 'Task10 started - setting filesystem quota');
@@ -375,41 +337,49 @@ while ($row = $db->fetch_array($result_tasks)) {
 		$usedquota = getFilesystemQuota();
 
 		// Select all customers Froxlor knows about
-		$result = $db->query("SELECT `guid`, `loginname`, `diskspace` FROM `" . TABLE_PANEL_CUSTOMERS . "`;");
-		while ($row = $db->fetch_array($result)) {
+		$result_stmt = Database::query("SELECT `guid`, `loginname`, `diskspace` FROM `" . TABLE_PANEL_CUSTOMERS . "`;");
+		while ($row = $result_stmt->fetch(PDO::FETCH_ASSOC)) {
 			// We do not want to set a quota for root by accident
 			if ($row['guid'] != 0) {
 				// The user has no quota in Froxlor, but on the filesystem
-				if (($row['diskspace'] == 0 || $row['diskspace'] == -1024) 
-						&& $usedquota[$row['guid']]['block']['hard'] != 0
+				if (($row['diskspace'] == 0 || $row['diskspace'] == -1024)
+					&& $usedquota[$row['guid']]['block']['hard'] != 0
 				) {
 					$cronlog->logAction(CRON_ACTION, LOG_NOTICE, "Disabling quota for " . $row['loginname']);
-					safe_exec($settings['system']['diskquota_quotatool_path'] . " -u " . $row['guid'] . " -bl 0 -q 0 " . escapeshellarg($settings['system']['diskquota_customer_partition']));
+					if (isFreeBSD()) {
+						safe_exec(Settings::Get('system.diskquota_quotatool_path') . " -e " . escapeshellarg(Settings::Get('system.diskquota_customer_partition')) . ":0:0 " . $row['guid']);
+					} else {
+						safe_exec(Settings::Get('system.diskquota_quotatool_path') . " -u " . $row['guid'] . " -bl 0 -q 0 " . escapeshellarg(Settings::Get('system.diskquota_customer_partition')));
+					}
 				}
 				// The user quota in Froxlor is different than on the filesystem
-				elseif ($row['diskspace'] != $usedquota[$row['guid']]['block']['hard'] 
-						&& $row['diskspace'] != -1024
+				elseif ($row['diskspace'] != $usedquota[$row['guid']]['block']['hard']
+					&& $row['diskspace'] != -1024
 				) {
 					$cronlog->logAction(CRON_ACTION, LOG_NOTICE, "Setting quota for " . $row['loginname'] . " from " . $usedquota[$row['guid']]['block']['hard'] . " to " . $row['diskspace']);
-					safe_exec($settings['system']['diskquota_quotatool_path'] . " -u " . $row['guid'] . " -bl " . $row['diskspace'] . " -q " . $row['diskspace'] . " " . escapeshellarg($settings['system']['diskquota_customer_partition']));
+					if (isFreeBSD()) {
+						safe_exec(Settings::Get('system.diskquota_quotatool_path') . " -e " . escapeshellarg(Settings::Get('system.diskquota_customer_partition')) . ":" . $row['diskspace'] . ":" . $row['diskspace'] . " " . $row['guid']);
+					} else {
+						safe_exec(Settings::Get('system.diskquota_quotatool_path') . " -u " . $row['guid'] . " -bl " . $row['diskspace'] . " -q " . $row['diskspace'] . " " . escapeshellarg(Settings::Get('system.diskquota_customer_partition')));
+					}
 				}
 			}
 		}
 	}
 }
 
-if($db->num_rows($result_tasks) != 0)
-{
+if ($num_results != 0) {
 	$where = array();
-	foreach($resultIDs as $id)
-	{
-		$where[] = '`id`=\'' . (int)$id . '\'';
+	$where_data = array();
+	foreach ($resultIDs as $id) {
+		$where[] = "`id` = :id_" . (int)$id;
+		$where_data['id_'.$id] = $id;
 	}
-
 	$where = implode($where, ' OR ');
-	$db->query('DELETE FROM `' . TABLE_PANEL_TASKS . '` WHERE ' . $where);
+	$del_stmt = Database::prepare("DELETE FROM `" . TABLE_PANEL_TASKS . "` WHERE " . $where);
+	Database::pexecute($del_stmt, $where_data);
 	unset($resultIDs);
 	unset($where);
 }
 
-$db->query('UPDATE `' . TABLE_PANEL_SETTINGS . '` SET `value` = UNIX_TIMESTAMP() WHERE `settinggroup` = \'system\'   AND `varname` = \'last_tasks_run\' ');
+Database::query("UPDATE `" . TABLE_PANEL_SETTINGS . "` SET `value` = UNIX_TIMESTAMP() WHERE `settinggroup` = 'system' AND `varname` = 'last_tasks_run';");

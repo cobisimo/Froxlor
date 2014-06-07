@@ -10,17 +10,20 @@ $header
 			</h2>
 		</header>
 
-		<section class="fullform bradius">
-        	<table class="formtable">
+		<section>
+			<table class="full">
 				{$configpage}
 				<if $restart != ''>
+				<tr class="section">
+					<th>{$lng['admin']['configfiles']['restart']}</th>
 				<tr>
-					<td>{$lng['admin']['configfiles']['restart']}<br /><br />
-					<textarea class="textarea_border" rows="3" cols="70" readonly="readonly">$restart</textarea></td>
+				<tr>
+					<td>
+					<textarea class="textarea_border" rows="" cols="70" readonly="readonly">$restart</textarea></td>
 				</tr>
 				</if>
 		</table>
-		<br /><br />
+		<br />
 		</section>
 </article>
 $footer

@@ -2,32 +2,24 @@ $header
 	<article>
 		<header>
 			<h2>
-				<img src="templates/{$theme}/assets/img/{$image}" alt="{$title}" />&nbsp;
+				<img src="templates/{$theme}/assets/img/icons/phpsettings_add_big.png" alt="{$title}" />&nbsp;
 				{$title}
 			</h2>
 		</header>
 
-		<section class="fullform bradius">
+		<section>
 
 			<form action="{$linker->getLink(array('section' => 'phpsettings'))}" method="post" enctype="application/x-www-form-urlencoded">
-				<fieldset>
-					<legend>Froxlor&nbsp;-&nbsp;{$title}</legend>
+				<input type="hidden" name="s" value="$s" />
+				<input type="hidden" name="page" value="$page" />
+				<input type="hidden" name="action" value="$action" />
+				<input type="hidden" name="send" value="send" />
 
-					<table class="formtable">
-						{$phpconfig_add_form}
-					</table>
-
-					<p style="display: none;">
-						<input type="hidden" name="s" value="$s" />
-						<input type="hidden" name="page" value="$page" />
-						<input type="hidden" name="action" value="$action" />
-						<input type="hidden" name="send" value="send" />
-					</p>
-				</fieldset>
+				<table class="full">
+					{$phpconfig_add_form}
+				</table>
 			</form>
-
 		</section>
-
 	</article>
 	<br />
 	<article>
@@ -39,7 +31,7 @@ $header
 		
 		<section>
 			
-			<table class="bradius">
+			<table class="full">
 			<thead>
 				<tr>
 					<th>{$lng['panel']['variable']}</th>
